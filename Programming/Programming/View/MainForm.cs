@@ -40,19 +40,16 @@ namespace Programming
             ValuesTextBox.Text = value.ToString();
         }
 
-
         private void WeekdayParsingButton_Click(object sender, EventArgs e)
         {
+            Weekday text;
+            if (Enum.TryParse(WeekdayParsingTextBox.Text, out text))
             {
-                Weekday text;
-                if (Enum.TryParse(WeekdayParsingTextBox.Text, out text))
-                {
-                    WeekdayParsingLabel.Text = String.Format("Это день недели ({0} = {1})", text, (int)text + 1);
-                }
-                else
-                {
-                    WeekdayParsingLabel.Text = "Нет такого дня недели";
-                }
+                WeekdayParsingLabel.Text = String.Format("Это день недели ({0} = {1})", text, (int)text);
+            }
+            else
+            {
+                WeekdayParsingLabel.Text = "Нет такого дня недели";
             }
         }
 
@@ -84,7 +81,5 @@ namespace Programming
                     }
             }
         }
-
-
     }
 }

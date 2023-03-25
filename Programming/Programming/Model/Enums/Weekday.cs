@@ -8,7 +8,7 @@ namespace Programming.Model.Enums
 {
     public enum Weekday
     {
-        Monday,
+        Monday = 1,
         Tuesday,
         Wednesday,
         Thursday,

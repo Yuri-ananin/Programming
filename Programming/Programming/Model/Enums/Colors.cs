@@ -8,7 +8,7 @@ namespace Programming.Model.Enums
 {
     public enum Colors
     {
-        Yellow,
+        Yellow = 6,
         Red,
         Blue,
         Black,
