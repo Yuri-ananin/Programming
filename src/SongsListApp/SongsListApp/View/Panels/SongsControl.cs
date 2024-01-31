@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
 using SongsListApp.Model.Classes;
-using Newtonsoft.Json;
 using SongsListApp.Model.Enums;
 
 namespace SongsListApp
@@ -66,15 +56,11 @@ namespace SongsListApp
         /// </summary>
         private int _selectedIndex;
 
-        /// <summary>
-        /// Название файла для сохранения или загрузки данных.
-        /// </summary>
-        private string _fileName = "Songs.Json";
-
         public SongsControl()
         {
             InitializeComponent();
-            LoadSongsInfo();
+            _songsList = ProjectManager.LoadSongs();
+            Sort();
             ClearSongInfo();
             SongsListBox.SelectedIndex = -1;
             SongGenreComboBox.DataSource = Enum.GetValues(typeof(Genre));
@@ -109,7 +95,7 @@ namespace SongsListApp
             _currentSong = _songsList[SongsListBox.SelectedIndex];
             _songsList.Remove(_currentSong);
             SongsListBox.SelectedIndex = -1;
-            SaveSong();
+            ProjectManager.SaveSongs(_songsList);
             Sort();
             ClearSongInfo();
         }
@@ -256,7 +242,7 @@ namespace SongsListApp
                 );
                 _songsList.Add(_currentSong);
                 Sort();
-                SaveSong();
+                ProjectManager.SaveSongs(_songsList);
                 ToggleInputBoxes(false);
                 return;
             }
@@ -264,9 +250,10 @@ namespace SongsListApp
             _songsList[_selectedIndex] = _cloneCurrentSong;
             _currentSong = _cloneCurrentSong;
             Sort();
-            SaveSong();
+            ProjectManager.SaveSongs(_songsList);
             ToggleInputBoxes(false);
             UpdateSongInfo();
+            ClearSongInfo();
         }
 
         /// <summary>
@@ -331,31 +318,6 @@ namespace SongsListApp
             ArtistNameTextBox.Text = _currentSong.Artist.ToString();
             SongDurationTextBox.Text = _currentSong.Duration.ToString();
             SongGenreComboBox.Text = _currentSong.Genre.ToString();
-        }
-
-        /// <summary>
-        /// Метод, который сохраняет данные всех песен в json файл (Songs.json).
-        /// </summary>
-        public void SaveSong()
-        {
-            if (SongsListBox.Items.Count != 0)
-            {
-                var jsonString = System.Text.Json.JsonSerializer.Serialize(_songsList);
-                File.WriteAllText("Songs.json", jsonString);
-            }
-        }
-
-        /// <summary>
-        /// Метод, который построчно считывает текстовый файл 
-        /// для заполнения <see cref="SongsListBox"/> и <see cref="_songsList"/>.
-        /// </summary>
-        private void LoadSongsInfo()
-        {
-            if (File.Exists(_fileName))
-            {
-                _songsList = JsonConvert.DeserializeObject<List<Song>>(File.ReadAllText(_fileName));
-                Sort();
-            }
         }
     }
 }
