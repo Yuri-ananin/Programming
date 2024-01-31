@@ -31,7 +31,7 @@ namespace SongsListApp.Model.Classes
         /// </summary>
         /// <param name="value">Строка, которую нужно проверить.</param>
         /// <returns>True or false.</returns>
-        public static bool CheckStringContainsOnlyEnglishLetters(string? value)
+        public static bool AssertStringContainsOnlyEnglishLetters(string? value)
         {
             bool flag = true;
             foreach (char c in value)

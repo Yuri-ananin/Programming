@@ -19,7 +19,7 @@ namespace SongsListApp.Model.Classes
         /// <summary>
         /// Название исполнителя.
         /// </summary>
-        private string _performer;
+        private string _artist;
 
         /// <summary>
         /// Длительность песни в секундах.
@@ -42,7 +42,7 @@ namespace SongsListApp.Model.Classes
             }
             set
             {
-                if (!Validator.CheckStringContainsOnlyEnglishLetters(value))
+                if (!Validator.AssertStringContainsOnlyEnglishLetters(value))
                 {
                     throw new ArgumentException($"Допустима только латиница в названии песни.");
                 }
@@ -55,21 +55,21 @@ namespace SongsListApp.Model.Classes
         /// <summary>
         /// Возвращает и задает название исполнителя песни. Должно быть написано на латинице и иметь длину в диапазоне от 0 до 50 символов.
         /// </summary>
-        public string Performer
+        public string Artist
         {
             get
             {
-                return _performer;
+                return _artist;
             }
             set
             {
-                if (!Validator.CheckStringContainsOnlyEnglishLetters(value))
+                if (!Validator.AssertStringContainsOnlyEnglishLetters(value))
                 {
                     throw new ArgumentException($"Допустима только латиница в названии исполнителя.");
                 }
 
                 Validator.AssertValueInRange(value.Length, 0, 50);
-                _performer = value;
+                _artist = value;
             }
         }
         
@@ -102,14 +102,14 @@ namespace SongsListApp.Model.Classes
         /// </summary>
         /// <param name="name">Название. Должно быть написано на латинице 
         /// и иметь длину в диапазоне от 0 до 50 символов.</param>
-        /// <param name="performer">Название исполнителя. Далжно быть написано на латинице
+        /// <param name="artist">Название исполнителя. Далжно быть написано на латинице
         /// и иметь длину в диапазоне от 0 до 50 символов.</param>
         /// <param name="duration">Длительность в секундах. Должна быть в диапазоне от 0 до 7200.</param>
         /// <param name="genre">Жанр.</param>
-        public Song(string name, string performer, int duration, string genre)
+        public Song(string name, string artist, int duration, string genre)
         {
             this.Name = name;
-            this.Performer = performer;
+            this.Artist = artist;
             this.Duration = duration;
             this.Genre = genre;
         }
@@ -117,11 +117,11 @@ namespace SongsListApp.Model.Classes
         /// <summary>
         /// Переопределение метода ToString() для класса <see cref="Song"/>.
         /// </summary>
-        /// <returns>Строка: "Название песни - Название исполнителя".</returns>
+        /// <returns>Строка: "Название исполнителя - Название песни".</returns>
         public override string ToString()
         {
-            return $"{Name} - " +
-                $"{Performer}";
+            return $"{Artist} - " +
+                $"{Name}";
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace SongsListApp.Model.Classes
         /// <returns>Клонированный объект класса.</returns>
         public object Clone()
         {
-            return this.MemberwiseClone();
+            return MemberwiseClone();
         }
     }
 }

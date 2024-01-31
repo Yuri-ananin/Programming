@@ -12,6 +12,11 @@ namespace SongsListApp.Model.Enums
     public enum Genre
     {
         /// <summary>
+        /// Рэп.
+        /// </summary>
+        Rap,
+
+        /// <summary>
         /// Поп.
         /// </summary>
         Pop,

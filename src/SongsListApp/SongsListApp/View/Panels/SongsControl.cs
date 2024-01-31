@@ -36,6 +36,26 @@ namespace SongsListApp
         private Song _cloneCurrentSong = new();
 
         /// <summary>
+        /// Правильность ввода названия песни.
+        /// </summary>
+        private bool _isValidDataName = true;
+
+        /// <summary>
+        /// Правильность ввода имени артиста.
+        /// </summary>
+        private bool _isValidDataArtist = true;
+
+        /// <summary>
+        /// Правильность ввода длительности песни.
+        /// </summary>
+        private bool _isValidDataDuration = true;
+
+        /// <summary>
+        /// Правильность ввода жанра песни.
+        /// </summary>
+        private bool _isValidDataGenre = true;
+
+        /// <summary>
         /// Индекс текущего выбранного элемента перед сортировкой
         /// для сохранения выбранного элемента в SongsListBox.
         /// </summary>
@@ -55,63 +75,26 @@ namespace SongsListApp
         {
             InitializeComponent();
             LoadSongsInfo();
-            ClearSongsInfo();
+            ClearSongInfo();
             SongsListBox.SelectedIndex = -1;
-
-            // заполнение GenreComboBox
-            GenreComboBox.DataSource = Enum.GetValues(typeof(Genre));
-            GenreComboBox.SelectedIndex = -1;
+            SongGenreComboBox.DataSource = Enum.GetValues(typeof(Genre));
+            SongGenreComboBox.SelectedIndex = -1;
             ToggleInputBoxes(false);
-        }
-
-        /// <summary>
-        /// Метод, который сохраняет данные всех песен в json файл (Songs.json).
-        /// </summary>
-        public void SaveSong()
-        {
-            if (SongsListBox.Items.Count != 0)
-            {
-                var jsonString = System.Text.Json.JsonSerializer.Serialize(_songsList);
-                File.WriteAllText("Songs.json", jsonString);
-            }
-        }
-
-        /// <summary>
-        /// Метод, который очищает текстовые поля и ComboBox.
-        /// </summary>
-        private void ClearSongsInfo()
-        {
-            SongNameTextBox.Clear();
-            PerformerNameTextBox.Clear();
-            DurationTextBox.Clear();
-            GenreComboBox.SelectedIndex = -1;
-        }
-        
-        /// <summary>
-        /// Метод, который включает или отключает все TextBox, ComboBox и ApplyButton.
-        /// </summary>
-        /// <param name="value">True or false.</param>
-        private void ToggleInputBoxes(bool value)
-        {
-            SongNameTextBox.Enabled = value;
-            PerformerNameTextBox.Enabled = value;
-            DurationTextBox.Enabled = value;
-            GenreComboBox.Enabled = value;
-            ApplyButton.Visible = value;
         }
 
         private void GenreComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (GenreComboBox.SelectedIndex != -1 && _cloneCurrentSong.Genre != null)
+            
+            if (SongGenreComboBox.SelectedIndex != -1 && _cloneCurrentSong.Genre != null)
             {
                 Enum.Parse(typeof(Genre), _cloneCurrentSong.Genre);
-                _cloneCurrentSong.Genre = GenreComboBox.SelectedItem.ToString();
+                _cloneCurrentSong.Genre = SongGenreComboBox.SelectedItem.ToString();
             }
         }
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            ClearSongsInfo();
+            ClearSongInfo();
             SongsListBox.SelectedIndex = -1;
             _selectedIndex = -1;
             ToggleInputBoxes(true);
@@ -128,7 +111,7 @@ namespace SongsListApp
             SongsListBox.SelectedIndex = -1;
             SaveSong();
             Sort();
-            ClearSongsInfo();
+            ClearSongInfo();
         }
 
         private void EditButton_Click(object sender, EventArgs e)
@@ -143,20 +126,6 @@ namespace SongsListApp
             ToggleInputBoxes(true);
         }
 
-        /// <summary>
-        /// Метод, который сортирует <see cref="_songsList"/> и <see cref="SongsListBox"/>
-        /// в алфавитном порядке.
-        /// </summary>
-        private void Sort()
-        {
-            _indexBeforeSort = SongsListBox.SelectedIndex;
-            SongsListBox.SelectedIndexChanged -= SongsListBox_SelectedIndexChanged;
-            _songsList = _songsList.OrderBy(song => song.ToString()).ToList();
-            SongsListBox.DataSource = _songsList;
-            SongsListBox.SelectedIndex = _indexBeforeSort;
-            SongsListBox.SelectedIndexChanged += SongsListBox_SelectedIndexChanged;
-        }
-
         private void SongsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (SongsListBox.SelectedIndex != -1)
@@ -164,18 +133,114 @@ namespace SongsListApp
                 ToggleInputBoxes(false);
                 _cloneCurrentSong = (Song)_songsList[SongsListBox.SelectedIndex].Clone();
                 SongNameTextBox.Text = _cloneCurrentSong.Name.ToString();
-                PerformerNameTextBox.Text = _cloneCurrentSong.Performer.ToString();
-                DurationTextBox.Text = _cloneCurrentSong.Duration.ToString();
-                GenreComboBox.Text = _cloneCurrentSong.Genre;
+                ArtistNameTextBox.Text = _cloneCurrentSong.Artist.ToString();
+                SongDurationTextBox.Text = _cloneCurrentSong.Duration.ToString();
+                SongGenreComboBox.Text = _cloneCurrentSong.Genre;
+            }
+        }
+
+        private void DurationTextBox_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(SongDurationTextBox.Text))
+                {
+                    if (!int.TryParse(SongDurationTextBox.Text, out var number))
+                    {
+                        SongDurationTextBox.BackColor = Color.LightPink;
+                        SongDurationErrorLabel.Visible = true;
+                        _isValidDataDuration = false;
+                        CheckData();
+                        return;
+                    }
+
+                    _cloneCurrentSong.Duration = Convert.ToInt32(SongDurationTextBox.Text);
+                    SongDurationTextBox.BackColor = Color.White;
+                    SongDurationErrorLabel.Visible = false;
+                    _isValidDataDuration = true;
+                    CheckData();
+                }
+            }
+
+            catch (ArgumentException)
+            {
+                SongDurationTextBox.BackColor = Color.LightPink;
+                SongDurationErrorLabel.Visible = true;
+                _isValidDataDuration = false;
+                CheckData();
+            }
+        }
+
+        private void SongNameTextBox_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(SongNameTextBox.Text))
+                {
+                    Validator.AssertStringContainsOnlyEnglishLetters(SongNameTextBox.Text);
+                    _cloneCurrentSong.Name = SongNameTextBox.Text;
+                    SongNameTextBox.BackColor = Color.White;
+                    SongNameErrorLabel.Visible = false;
+                    _isValidDataName = true;
+                    CheckData();
+                    return;
+                }
+
+                else
+                {
+                    SongNameTextBox.BackColor = Color.LightPink;
+                    SongNameErrorLabel.Visible = true;
+                    _isValidDataName = false;
+                    CheckData();
+                }
+            }
+            catch (ArgumentException)
+            {
+                SongNameTextBox.BackColor = Color.LightPink;
+                SongNameErrorLabel.Visible = true;
+                _isValidDataName = false;
+                CheckData();
+            }
+        }
+
+        private void ArtistNameTextBox_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ArtistNameTextBox.Text))
+                {
+                    Validator.AssertStringContainsOnlyEnglishLetters(ArtistNameTextBox.Text);
+                    _cloneCurrentSong.Artist = ArtistNameTextBox.Text;
+                    ArtistNameTextBox.BackColor = Color.White;
+                    ArtistNameErrorLabel.Visible = false;
+                    _isValidDataArtist = true;
+                    CheckData();
+                    return;
+                }
+
+                else
+                {
+                    ArtistNameTextBox.BackColor = Color.LightPink;
+                    ArtistNameErrorLabel.Visible = true;
+                    _isValidDataArtist = false;
+                    CheckData();
+                }
+            }
+            catch (ArgumentException)
+            {
+                ArtistNameTextBox.BackColor = Color.LightPink;
+                ArtistNameErrorLabel.Visible = true;
+                _isValidDataArtist = false;
+                CheckData();
             }
         }
 
         private void ApplyButton_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(SongNameTextBox.Text) ||
-                string.IsNullOrEmpty(PerformerNameTextBox.Text) ||
-                string.IsNullOrEmpty(DurationTextBox.Text) ||
-                string.IsNullOrEmpty(GenreComboBox.Text))
+                string.IsNullOrEmpty(ArtistNameTextBox.Text) ||
+                string.IsNullOrEmpty(SongDurationTextBox.Text) ||
+                string.IsNullOrEmpty(SongGenreComboBox.Text))
             {
                 MessageBox.Show("Заполните все поля.", "Ошибка ввода");
                 return;
@@ -185,9 +250,9 @@ namespace SongsListApp
             {
                 _currentSong = new Song(
                     SongNameTextBox.Text.ToString(),
-                    PerformerNameTextBox.Text.ToString(),
-                    Convert.ToInt32(DurationTextBox.Text),
-                    GenreComboBox.Text.ToString()
+                    ArtistNameTextBox.Text.ToString(),
+                    Convert.ToInt32(SongDurationTextBox.Text),
+                    SongGenreComboBox.Text.ToString()
                 );
                 _songsList.Add(_currentSong);
                 Sort();
@@ -205,14 +270,79 @@ namespace SongsListApp
         }
 
         /// <summary>
+        /// Метод, который сортирует <see cref="_songsList"/> и <see cref="SongsListBox"/>
+        /// в алфавитном порядке.
+        /// </summary>
+        private void Sort()
+        {
+            _indexBeforeSort = SongsListBox.SelectedIndex;
+            SongsListBox.SelectedIndexChanged -= SongsListBox_SelectedIndexChanged;
+            _songsList = _songsList.OrderBy(song => song.ToString()).ToList();
+            SongsListBox.DataSource = _songsList;
+            SongsListBox.SelectedIndex = _indexBeforeSort;
+            SongsListBox.SelectedIndexChanged += SongsListBox_SelectedIndexChanged;
+        }
+
+        /// <summary>
+        /// Метод, проверяющий значения текстовых полей и не дающий их сохранить в случае неправильного ввода.
+        /// </summary>
+        private void CheckData()
+        {
+            if (_isValidDataName && _isValidDataArtist && _isValidDataDuration && _isValidDataGenre)
+            {
+                ApplyButton.Enabled = true;
+            }
+            else
+            {
+                ApplyButton.Enabled = false;
+            }
+        }
+
+        /// <summary>
+        /// Метод, который очищает текстовые поля и ComboBox.
+        /// </summary>
+        private void ClearSongInfo()
+        {
+            SongNameTextBox.Clear();
+            ArtistNameTextBox.Clear();
+            SongDurationTextBox.Clear();
+            SongGenreComboBox.SelectedIndex = -1;
+        }
+
+        /// <summary>
+        /// Метод, который включает или отключает все TextBox, ComboBox и ApplyButton.
+        /// </summary>
+        /// <param name="value">True or false.</param>
+        private void ToggleInputBoxes(bool value)
+        {
+            SongNameTextBox.Enabled = value;
+            ArtistNameTextBox.Enabled = value;
+            SongDurationTextBox.Enabled = value;
+            SongGenreComboBox.Enabled = value;
+            ApplyButton.Visible = value;
+        }
+
+        /// <summary>
         /// Метод, который обновляет данные текущей выбранной песни в TextBox и ComboBox.
         /// </summary>
         private void UpdateSongInfo()
         {
             SongNameTextBox.Text = _currentSong.Name.ToString();
-            PerformerNameTextBox.Text = _currentSong.Performer.ToString();
-            DurationTextBox.Text = _currentSong.Duration.ToString();
-            GenreComboBox.Text = _currentSong.Genre.ToString();
+            ArtistNameTextBox.Text = _currentSong.Artist.ToString();
+            SongDurationTextBox.Text = _currentSong.Duration.ToString();
+            SongGenreComboBox.Text = _currentSong.Genre.ToString();
+        }
+
+        /// <summary>
+        /// Метод, который сохраняет данные всех песен в json файл (Songs.json).
+        /// </summary>
+        public void SaveSong()
+        {
+            if (SongsListBox.Items.Count != 0)
+            {
+                var jsonString = System.Text.Json.JsonSerializer.Serialize(_songsList);
+                File.WriteAllText("Songs.json", jsonString);
+            }
         }
 
         /// <summary>
@@ -225,81 +355,6 @@ namespace SongsListApp
             {
                 _songsList = JsonConvert.DeserializeObject<List<Song>>(File.ReadAllText(_fileName));
                 Sort();
-            }
-        }
-
-        private void DurationTextBox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(DurationTextBox.Text))
-                {
-                    if (!int.TryParse(DurationTextBox.Text, out var number))
-                    {
-                        DurationTextBox.BackColor = Color.LightPink;
-                        return;
-                    }
-
-                    _cloneCurrentSong.Duration = Convert.ToInt32(DurationTextBox.Text);
-                    DurationTextBox.BackColor = Color.White;
-                }
-            }
-            catch (FormatException)
-            {
-                DurationTextBox.BackColor = Color.LightPink;
-            }
-            catch (OverflowException)
-            {
-                DurationTextBox.BackColor = Color.LightPink;
-            }
-        }
-
-        private void SongNameTextBox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(SongNameTextBox.Text))
-                {
-                    if (Validator.CheckStringContainsOnlyEnglishLetters(SongNameTextBox.Text))
-                    {
-                        _cloneCurrentSong.Name = SongNameTextBox.Text;
-                        SongNameTextBox.BackColor = Color.White;
-                        return;
-                    }
-
-                    else
-                    {
-                        SongNameTextBox.BackColor = Color.LightPink;
-                    }
-                }
-            }
-
-            catch (ArgumentException ex)
-            {
-                SongNameTextBox.BackColor = Color.LightPink;
-            }
-        }
-
-        private void PerformerNameTextBox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(PerformerNameTextBox.Text))
-                {
-                    if (Validator.CheckStringContainsOnlyEnglishLetters(PerformerNameTextBox.Text))
-                    {
-                        _cloneCurrentSong.Performer = PerformerNameTextBox.Text;
-                        PerformerNameTextBox.BackColor = Color.White;
-                    }
-                    else
-                    {
-                        PerformerNameTextBox.BackColor = Color.LightPink;
-                    }
-                }
-            }
-            catch (ArgumentException ex)
-            {
-                PerformerNameTextBox.BackColor = Color.LightPink;
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace SongsListApp
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,29 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            songsControl1 = new SongsControl();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            SongsControl = new SongsControl();
             SuspendLayout();
             // 
-            // songsControl1
+            // SongsControl
             // 
-            songsControl1.Location = new Point(0, 0);
-            songsControl1.Name = "songsControl1";
-            songsControl1.Size = new Size(705, 451);
-            songsControl1.TabIndex = 0;
+            SongsControl.Dock = DockStyle.Fill;
+            SongsControl.Location = new Point(0, 0);
+            SongsControl.Name = "SongsControl";
+            SongsControl.Size = new Size(705, 451);
+            SongsControl.TabIndex = 0;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(705, 451);
-            Controls.Add(songsControl1);
+            Controls.Add(SongsControl);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
-            Text = "Form1";
+            Text = "SongsApp";
             ResumeLayout(false);
         }
 
         #endregion
 
-        private SongsControl songsControl1;
+        private SongsControl SongsControl;
     }
 }
