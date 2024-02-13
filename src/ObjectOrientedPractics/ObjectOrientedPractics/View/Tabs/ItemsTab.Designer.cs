@@ -43,6 +43,8 @@
             ItemsListBox = new ListBox();
             AddItemButton = new Button();
             ItemsGroupBox = new GroupBox();
+            CategoryComboBox = new ComboBox();
+            CategoryLabel = new Label();
             SaveButton = new Button();
             EditButton = new Button();
             ItemsGroupBox.SuspendLayout();
@@ -59,7 +61,7 @@
             // 
             // IdTextBox
             // 
-            IdTextBox.Location = new Point(341, 37);
+            IdTextBox.Location = new Point(345, 19);
             IdTextBox.Name = "IdTextBox";
             IdTextBox.ReadOnly = true;
             IdTextBox.Size = new Size(120, 23);
@@ -68,7 +70,7 @@
             // DescriptionLabel
             // 
             DescriptionLabel.AutoSize = true;
-            DescriptionLabel.Location = new Point(304, 236);
+            DescriptionLabel.Location = new Point(283, 236);
             DescriptionLabel.Name = "DescriptionLabel";
             DescriptionLabel.Size = new Size(70, 15);
             DescriptionLabel.TabIndex = 3;
@@ -87,7 +89,8 @@
             // 
             // CostTextBox
             // 
-            CostTextBox.Location = new Point(341, 71);
+            CostTextBox.Enabled = false;
+            CostTextBox.Location = new Point(344, 51);
             CostTextBox.Name = "CostTextBox";
             CostTextBox.Size = new Size(120, 23);
             CostTextBox.TabIndex = 5;
@@ -96,7 +99,7 @@
             // NameLabel
             // 
             NameLabel.AutoSize = true;
-            NameLabel.Location = new Point(304, 116);
+            NameLabel.Location = new Point(283, 116);
             NameLabel.Name = "NameLabel";
             NameLabel.Size = new Size(42, 15);
             NameLabel.TabIndex = 2;
@@ -105,7 +108,8 @@
             // NameTextBox
             // 
             NameTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            NameTextBox.Location = new Point(304, 134);
+            NameTextBox.Enabled = false;
+            NameTextBox.Location = new Point(283, 134);
             NameTextBox.Multiline = true;
             NameTextBox.Name = "NameTextBox";
             NameTextBox.Size = new Size(560, 99);
@@ -115,7 +119,7 @@
             // IdLabel
             // 
             IdLabel.AutoSize = true;
-            IdLabel.Location = new Point(304, 45);
+            IdLabel.Location = new Point(283, 27);
             IdLabel.Name = "IdLabel";
             IdLabel.Size = new Size(21, 15);
             IdLabel.TabIndex = 0;
@@ -124,7 +128,7 @@
             // CostLabel
             // 
             CostLabel.AutoSize = true;
-            CostLabel.Location = new Point(304, 74);
+            CostLabel.Location = new Point(283, 59);
             CostLabel.Name = "CostLabel";
             CostLabel.Size = new Size(34, 15);
             CostLabel.TabIndex = 1;
@@ -133,7 +137,8 @@
             // DescriptionTextBox
             // 
             DescriptionTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            DescriptionTextBox.Location = new Point(304, 254);
+            DescriptionTextBox.Enabled = false;
+            DescriptionTextBox.Location = new Point(283, 254);
             DescriptionTextBox.Multiline = true;
             DescriptionTextBox.Name = "DescriptionTextBox";
             DescriptionTextBox.Size = new Size(560, 202);
@@ -164,6 +169,8 @@
             // 
             // ItemsGroupBox
             // 
+            ItemsGroupBox.Controls.Add(CategoryComboBox);
+            ItemsGroupBox.Controls.Add(CategoryLabel);
             ItemsGroupBox.Controls.Add(SaveButton);
             ItemsGroupBox.Controls.Add(EditButton);
             ItemsGroupBox.Controls.Add(AddItemButton);
@@ -185,6 +192,26 @@
             ItemsGroupBox.TabStop = false;
             ItemsGroupBox.Text = "Items";
             // 
+            // CategoryComboBox
+            // 
+            CategoryComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            CategoryComboBox.Enabled = false;
+            CategoryComboBox.FormattingEnabled = true;
+            CategoryComboBox.Location = new Point(344, 85);
+            CategoryComboBox.Name = "CategoryComboBox";
+            CategoryComboBox.Size = new Size(121, 23);
+            CategoryComboBox.TabIndex = 13;
+            CategoryComboBox.SelectedIndexChanged += CategoryComboBox_SelectedIndexChanged;
+            // 
+            // CategoryLabel
+            // 
+            CategoryLabel.AutoSize = true;
+            CategoryLabel.Location = new Point(283, 88);
+            CategoryLabel.Name = "CategoryLabel";
+            CategoryLabel.Size = new Size(58, 15);
+            CategoryLabel.TabIndex = 12;
+            CategoryLabel.Text = "Category:";
+            // 
             // SaveButton
             // 
             SaveButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -194,6 +221,7 @@
             SaveButton.TabIndex = 11;
             SaveButton.Text = "Save";
             SaveButton.UseVisualStyleBackColor = true;
+            SaveButton.Visible = false;
             SaveButton.Click += SaveButton_Click;
             // 
             // EditButton
@@ -238,5 +266,7 @@
         private GroupBox ItemsGroupBox;
         private Button SaveButton;
         private Button EditButton;
+        private ComboBox CategoryComboBox;
+        private Label CategoryLabel;
     }
 }

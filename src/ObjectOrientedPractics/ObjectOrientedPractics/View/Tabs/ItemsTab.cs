@@ -63,16 +63,33 @@ namespace ObjectOrientedPractics.View.Tabs
         /// </summary>
         private bool _isValidDataDescription = true;
 
+        object[] _categoryValues = Enum.GetValues(typeof(Category)).Cast<object>().ToArray();
+
         /// <summary>
-        /// Название файла для записи данных.
+        /// Возвращает и задаёт список товаров.
         /// </summary>
-        private string _fileName = "Items.Json";
+        internal List<Item> Items
+        {
+            get
+            {
+                return _itemsList;
+            }
+            set
+            {
+                _itemsList = value;
+                Sort();
+            }
+        }
 
         public ItemsTab()
         {
             InitializeComponent();
-            LoadItemsInfo();
-            ToggleInputBoxes(false);
+            Sort();
+            ClearItemInfo();
+            ItemsListBox.SelectedIndex = -1;
+            // Заполнение CategoryComboBox значениями перечисления ItemsCategory
+            CategoryComboBox.Items.AddRange(_categoryValues);
+            CategoryComboBox.SelectedItem = _categoryValues[0];
         }
 
         private void AddItemButton_Click(object sender, EventArgs e)
@@ -95,15 +112,15 @@ namespace ObjectOrientedPractics.View.Tabs
 
             if (_selectedIndex == -1)
             {
-                _currentItem = new Model.Item(
+                _currentItem = new Item(
                     NameTextBox.Text,
                     DescriptionTextBox.Text,
-                    Convert.ToDouble(CostTextBox.Text)
-                );
+                    Convert.ToDouble(CostTextBox.Text),
+                    (Category)CategoryComboBox.SelectedItem);
                 _itemsList.Add(_currentItem);
                 Sort();
-                SaveItem();
                 ToggleInputBoxes(false);
+                ClearItemInfo();
                 return;
             }
             else
@@ -113,7 +130,6 @@ namespace ObjectOrientedPractics.View.Tabs
             }
 
             Sort();
-            SaveItem();
             ToggleInputBoxes(false);
             UpdateItemInfo();
             ItemsListBox.ClearSelected();
@@ -128,7 +144,9 @@ namespace ObjectOrientedPractics.View.Tabs
                 _cloneCurrentItem = (Item)_itemsList[ItemsListBox.SelectedIndex].Clone();
                 NameTextBox.Text = _cloneCurrentItem.Name.ToString();
                 DescriptionTextBox.Text = _cloneCurrentItem.Info.ToString();
+                IdTextBox.Text = _cloneCurrentItem.Id.ToString();
                 CostTextBox.Text = _cloneCurrentItem.Cost.ToString();
+                CategoryComboBox.Text = _cloneCurrentItem.Category.ToString();
             }
         }
 
@@ -141,7 +159,6 @@ namespace ObjectOrientedPractics.View.Tabs
             _currentItem = _itemsList[ItemsListBox.SelectedIndex];
             _itemsList.Remove(_currentItem);
             ItemsListBox.SelectedIndex = -1;
-            SaveItem();
             Sort();
             ClearItemInfo();
         }
@@ -188,7 +205,7 @@ namespace ObjectOrientedPractics.View.Tabs
             }
         }
 
-        
+
 
         private void NameTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -246,25 +263,9 @@ namespace ObjectOrientedPractics.View.Tabs
             }
         }
 
-        /// <summary>
-        /// Метод, который сохраняет данные в json файл.
-        /// </summary>
-        public void SaveItem()
+        private void CategoryComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ItemsListBox.Items.Count != 0)
-            {
-                var jsonString = System.Text.Json.JsonSerializer.Serialize(_itemsList);
-                File.WriteAllText("Items.json", jsonString);
-            }
-        }
-
-        private void LoadItemsInfo()
-        {
-            if (File.Exists(_fileName))
-            {
-                _itemsList = JsonConvert.DeserializeObject<List<Item>>(File.ReadAllText(_fileName));
-                Sort();
-            }
+            _cloneCurrentItem.Category = (Category)CategoryComboBox.SelectedItem;
         }
 
         /// <summary>
@@ -277,6 +278,7 @@ namespace ObjectOrientedPractics.View.Tabs
             NameTextBox.Enabled = value;
             DescriptionTextBox.Enabled = value;
             SaveButton.Visible = value;
+            CategoryComboBox.Enabled = value;
         }
 
         /// <summary>
@@ -287,6 +289,7 @@ namespace ObjectOrientedPractics.View.Tabs
             NameTextBox.Text = _currentItem.Name.ToString();
             DescriptionTextBox.Text = _currentItem.Info.ToString();
             CostTextBox.Text = _currentItem.Cost.ToString();
+            CategoryComboBox.Text = _currentItem.Category.ToString();
         }
 
         /// <summary>
@@ -297,7 +300,7 @@ namespace ObjectOrientedPractics.View.Tabs
         {
             _indexBeforeSort = ItemsListBox.SelectedIndex;
             ItemsListBox.SelectedIndexChanged -= ItemsListBox_SelectedIndexChanged;
-            _itemsList = _itemsList.OrderBy(song => song.ToString()).ToList();
+            _itemsList = _itemsList.OrderBy((item) => item.ToString()).ToList();
             ItemsListBox.DataSource = _itemsList;
             ItemsListBox.SelectedIndex = _indexBeforeSort;
             ItemsListBox.SelectedIndexChanged += ItemsListBox_SelectedIndexChanged;
@@ -315,6 +318,7 @@ namespace ObjectOrientedPractics.View.Tabs
             IdTextBox.Text = string.Empty;
             CostTextBox.Text = string.Empty;
             CostTextBox.BackColor = Color.White;
+            CategoryComboBox.Text = string.Empty;
         }
 
         /// <summary>

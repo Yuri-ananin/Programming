@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ObjectOrientedPractics.Services
+﻿namespace ObjectOrientedPractics.Services
 {
     /// <summary>
     /// Класс, описывающий методы для проверки значений.
@@ -19,9 +13,31 @@ namespace ObjectOrientedPractics.Services
         /// <param name="propertyName">Название поля, которая содержит проверяемую строку.</param>
         public static void AssertStringOnLength(string value, int maxLength, string propertyName)
         {
-            if(value.Length > maxLength)
+            if(value != null)
             {
-                throw new ArgumentException("{propertyName должен быть меньше {maxLength} символов");
+                if (value.Length > maxLength)
+                {
+                    throw new ArgumentException("{propertyName} должен быть меньше {maxLength} символов");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Проверка целочисленного значения на нахождение в интервале.
+        /// </summary>
+        /// <param name="value">Передаваемое значение.</param>
+        /// <param name="min">Минимально значение.</param>
+        /// <param name="max">Максимальное значение.</param>
+        /// <param name="propertyName">Сообщение об ошибке.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public static void AssertValueInRange(int value, int min, int max, string propertyName)
+        {
+            if (value != null)
+            {
+                if (value < min || value > max)
+                {
+                    throw new ArgumentException(propertyName);
+                }
             }
         }
     }

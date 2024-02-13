@@ -28,11 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            Model.Address address2 = new Model.Address();
             CustomersGroupBox = new GroupBox();
-            AddressTextBox = new TextBox();
             FullNameTextBox = new TextBox();
             IdTextBox = new TextBox();
-            label3 = new Label();
             label2 = new Label();
             label1 = new Label();
             AddCustomerButton = new Button();
@@ -40,15 +39,15 @@
             EditButton = new Button();
             SaveButton = new Button();
             CustomersListBox = new ListBox();
+            AddressControl = new Controls.AddressControl();
             CustomersGroupBox.SuspendLayout();
             SuspendLayout();
             // 
             // CustomersGroupBox
             // 
-            CustomersGroupBox.Controls.Add(AddressTextBox);
+            CustomersGroupBox.Controls.Add(AddressControl);
             CustomersGroupBox.Controls.Add(FullNameTextBox);
             CustomersGroupBox.Controls.Add(IdTextBox);
-            CustomersGroupBox.Controls.Add(label3);
             CustomersGroupBox.Controls.Add(label2);
             CustomersGroupBox.Controls.Add(label1);
             CustomersGroupBox.Controls.Add(AddCustomerButton);
@@ -59,27 +58,17 @@
             CustomersGroupBox.Dock = DockStyle.Fill;
             CustomersGroupBox.Location = new Point(0, 0);
             CustomersGroupBox.Name = "CustomersGroupBox";
-            CustomersGroupBox.Size = new Size(872, 567);
+            CustomersGroupBox.Size = new Size(810, 567);
             CustomersGroupBox.TabIndex = 0;
             CustomersGroupBox.TabStop = false;
             CustomersGroupBox.Text = "Customers";
-            // 
-            // AddressTextBox
-            // 
-            AddressTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            AddressTextBox.Location = new Point(373, 91);
-            AddressTextBox.Multiline = true;
-            AddressTextBox.Name = "AddressTextBox";
-            AddressTextBox.Size = new Size(493, 144);
-            AddressTextBox.TabIndex = 10;
-            AddressTextBox.TextChanged += AddressTextBox_TextChanged;
             // 
             // FullNameTextBox
             // 
             FullNameTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             FullNameTextBox.Location = new Point(373, 60);
             FullNameTextBox.Name = "FullNameTextBox";
-            FullNameTextBox.Size = new Size(493, 23);
+            FullNameTextBox.Size = new Size(431, 23);
             FullNameTextBox.TabIndex = 9;
             FullNameTextBox.TextChanged += FullNameTextBox_TextChanged;
             // 
@@ -89,15 +78,6 @@
             IdTextBox.Name = "IdTextBox";
             IdTextBox.Size = new Size(121, 23);
             IdTextBox.TabIndex = 8;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(303, 91);
-            label3.Name = "label3";
-            label3.Size = new Size(45, 15);
-            label3.TabIndex = 7;
-            label3.Text = "Adress:";
             // 
             // label2
             // 
@@ -122,7 +102,7 @@
             AddCustomerButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             AddCustomerButton.Location = new Point(3, 497);
             AddCustomerButton.Name = "AddCustomerButton";
-            AddCustomerButton.Size = new Size(86, 25);
+            AddCustomerButton.Size = new Size(86, 23);
             AddCustomerButton.TabIndex = 1;
             AddCustomerButton.Text = "Add";
             AddCustomerButton.UseVisualStyleBackColor = true;
@@ -172,13 +152,27 @@
             CustomersListBox.TabIndex = 0;
             CustomersListBox.SelectedIndexChanged += CustomersListBox_SelectedIndexChanged;
             // 
+            // AddressControl
+            // 
+            address2.Apartment = null;
+            address2.Building = null;
+            address2.City = null;
+            address2.Country = null;
+            address2.Index = 0;
+            address2.Street = null;
+            AddressControl.Address = address2;
+            AddressControl.Location = new Point(303, 89);
+            AddressControl.Name = "AddressControl";
+            AddressControl.Size = new Size(497, 151);
+            AddressControl.TabIndex = 1;
+            // 
             // CustomersTab
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(CustomersGroupBox);
             Name = "CustomersTab";
-            Size = new Size(872, 567);
+            Size = new Size(810, 567);
             CustomersGroupBox.ResumeLayout(false);
             CustomersGroupBox.PerformLayout();
             ResumeLayout(false);
@@ -192,11 +186,10 @@
         private Button RemoveButton;
         private Button EditButton;
         private Button SaveButton;
-        private TextBox AddressTextBox;
-        private TextBox FullNameTextBox;
         private TextBox IdTextBox;
-        private Label label3;
         private Label label2;
         private Label label1;
+        private TextBox FullNameTextBox;
+        private Controls.AddressControl AddressControl;
     }
 }

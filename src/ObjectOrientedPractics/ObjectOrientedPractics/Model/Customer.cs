@@ -1,12 +1,5 @@
-﻿using ObjectOrientedPractics.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using ObjectOrientedPractics.Services;
 
 namespace ObjectOrientedPractics.Model
 {
@@ -15,14 +8,8 @@ namespace ObjectOrientedPractics.Model
     /// </summary>
     internal class Customer: ICloneable
     {
-
         /// <summary>
-        /// Id покупателя.
-        /// </summary>
-        private int _id;
-
-        /// <summary>
-        /// Счётчик покупателей.
+        /// Счётчик для <see cref="Customer"/>.
         /// </summary>
         private static int _counter = 0;
 
@@ -34,23 +21,8 @@ namespace ObjectOrientedPractics.Model
         /// <summary>
         /// Адрес доставки для покупателя.
         /// </summary>
-        private string _address;
+        private Address _address = new Address();
 
-        /// <summary>
-        /// Возвращает и задает Id покупателя.
-        /// </summary>
-        [JsonProperty("Id")]
-        public int Id
-        {
-            get
-            {
-                return _id;
-            }
-            private set
-            {
-                _id = value;
-            }
-        }
         /// <summary>
         /// Возвращает и задает полное имя покупателя.
         /// </summary>
@@ -62,7 +34,7 @@ namespace ObjectOrientedPractics.Model
             }
             set
             {
-                ValueValidator.AssertStringOnLength(value, 200, "Fullname");
+                ValueValidator.AssertStringOnLength(value, 200, nameof(Fullname));
                 _fullname = value;
             }
         }
@@ -70,7 +42,7 @@ namespace ObjectOrientedPractics.Model
         /// <summary>
         /// Возвращает и задает адрес доставки для покупателя.
         /// </summary>
-        public string Address
+        public Address Address
         {
             get
             {
@@ -78,13 +50,12 @@ namespace ObjectOrientedPractics.Model
             }
             set
             {
-                ValueValidator.AssertStringOnLength(value, 500, "Address");
                 _address = value;
             }
         }
 
         /// <summary>
-        /// Возвращает и задает счетчик покупателей.
+        /// Возвращает и задаёт счётчик покупателей.
         /// </summary>
         public int Counter
         {
@@ -98,7 +69,12 @@ namespace ObjectOrientedPractics.Model
             }
         }
 
-     
+        /// <summary>
+        /// Возвращает и задает Id покупателя.
+        /// </summary>
+        [JsonProperty(nameof(Id))]
+        public int Id { get; private set; }
+
         /// <summary>
         /// Создает пустой экземпляр класса <see cref="Customer"/>.
         /// </summary>
@@ -115,11 +91,11 @@ namespace ObjectOrientedPractics.Model
         /// Должно содержать менее 200 символов</param>
         /// <param name="address">Адрес доставки для покупателя. 
         /// Должен содержать менее 500 символов</param>
-        public Customer(string fullname, string address)
+        public Customer(string fullname, Address address)
         {
-            _fullname = fullname;  
-            _address = address;
-            _counter++;
+            Fullname = fullname;  
+            Address = address;
+            Counter++;
             Id = _counter;
         }
 
@@ -141,7 +117,5 @@ namespace ObjectOrientedPractics.Model
         {
             return MemberwiseClone();
         }
-
-        
     }
 }
