@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using ObjectOrientedPractics.Model;
 using ObjectOrientedPractics.Services;
 
 namespace ObjectOrientedPractics.Model
@@ -14,12 +13,6 @@ namespace ObjectOrientedPractics.Model
     /// </summary>
     internal class Item: ICloneable
     {
-
-        /// <summary>
-        /// Id товара.
-        /// </summary>
-        private int _id;
-
         /// <summary>
         /// Наименование товара.
         /// </summary>
@@ -41,20 +34,15 @@ namespace ObjectOrientedPractics.Model
         private static int _counter = 0;
 
         /// <summary>
+        /// Возвращает и задает категорию товара.
+        /// </summary>
+        public Category Category { get; set; }
+
+        /// <summary>
         /// Возвращает и задает Id товара.
         /// </summary>
-        [JsonProperty("Id")]
-        public int Id
-        {
-            get
-            {
-                return _id;
-            }
-            private set
-            {
-                _id = value;
-            }
-        }
+        [JsonProperty(nameof(Id))]
+        public int Id { get; private set; }
 
         /// <summary>
         /// Возвращает и задает Наименование товара.
@@ -136,11 +124,13 @@ namespace ObjectOrientedPractics.Model
         /// <param name="name">Наименование товара. Должно содержать менее 200 символов.</param>
         /// <param name="info">Описание товара. Должно содержать менне 1000 символов.</param>
         /// <param name="cost">Цена товара. Должна быть в диапазоне от 0 до 100000.</param>
-        public Item(string name, string info, double cost) 
+        /// <param name="category">Категория товара.</param>
+        public Item(string name, string info, double cost, Category category) 
         {
             Name = name;
             Info = info;
             Cost = cost;
+            Category = category;
             Counter++;
             Id = _counter;
         }

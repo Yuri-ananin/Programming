@@ -1,23 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
+using ObjectOrientedPractics.View.Controls;
 using Newtonsoft.Json;
 using ObjectOrientedPractics.Model;
 
 namespace ObjectOrientedPractics.View.Tabs
 {
     /// <summary>
-    /// Класс, описывающиq пользовательский элемент управления, содержащий страницу Customers.
+    /// Класс, описывающий покупателей.
     /// </summary>
     public partial class CustomersTab : UserControl
     {
-
         /// <summary>
         /// Список с данными о покупателях.
         /// </summary>
@@ -54,50 +46,70 @@ namespace ObjectOrientedPractics.View.Tabs
         private bool _isValidAddress = true;
 
         /// <summary>
-        /// Название файла для записи данных.
+        /// Возвращает и задаёт список товаров.
         /// </summary>
-        private string _fileName = "Customers.Json";
+        internal List<Customer> Customers
+        {
+            get
+            {
+                return _customersList;
+            }
+            set
+            {
+                _customersList = value;
+                Sort();
+            }
+        }
 
         public CustomersTab()
         {
             InitializeComponent();
-            LoadCustomersInfo();
             IdTextBox.Enabled = false;
             ToggleInputBoxes(false);
+            AddressControl.Address = _currentCustomer.Address;
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(FullNameTextBox.Text) ||
-                string.IsNullOrEmpty(AddressTextBox.Text))
+                AddressControl.AddressIsNullOrEmpty())
             {
                 MessageBox.Show("Заполните все поля.", "Ошибка ввода");
                 return;
             }
 
-            if (_selectedIndex == -1)
+            if (_isValidFullName == true && AddressControl.IsValidAddress())
             {
-                _currentCustomer = new Model.Customer(
-                    FullNameTextBox.Text,
-                    AddressTextBox.Text);
-                _customersList.Add(_currentCustomer);
+                if (_selectedIndex == -1)
+                {
+                    Address address = new Address(AddressControl.Address.Index,
+                    AddressControl.Address.Country,
+                  AddressControl.Address.City, AddressControl.Address.Street,
+                  AddressControl.Address.Building, AddressControl.Address.Apartment);
+                    _currentCustomer = new Customer(FullNameTextBox.Text, address);
+                    _customersList.Add(_currentCustomer);
+                    Sort();
+                    ToggleInputBoxes(false);
+                    return;
+                }
+                else
+                {
+                    _customersList[_selectedIndex] = _cloneCurrentCustomer;
+                    _currentCustomer = _cloneCurrentCustomer;
+                }
+
                 Sort();
-                SaveCustomer();
                 ToggleInputBoxes(false);
-                return;
+                UpdateCustomerInfo();
+                CustomersListBox.ClearSelected();
+                ClearCustomerInfo();
             }
             else
             {
-                _customersList[_selectedIndex] = _cloneCurrentCustomer;
-                _currentCustomer = _cloneCurrentCustomer;
+                MessageBox.Show("Введены некорректные значения", "Ошибка сохранения");
+                return;
             }
 
-            Sort();
-            SaveCustomer();
-            ToggleInputBoxes(false);
-            UpdateCustomerInfo();
-            CustomersListBox.ClearSelected();
-            ClearCustomerInfo();
         }
 
         private void CustomersListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -107,7 +119,9 @@ namespace ObjectOrientedPractics.View.Tabs
                 ToggleInputBoxes(false);
                 _cloneCurrentCustomer = (Customer)_customersList[CustomersListBox.SelectedIndex].Clone();
                 FullNameTextBox.Text = _cloneCurrentCustomer.Fullname.ToString();
-                AddressTextBox.Text = _cloneCurrentCustomer.Address.ToString();
+                AddressControl.Address = _cloneCurrentCustomer.Address;
+                IdTextBox.Text = _cloneCurrentCustomer.Id.ToString();
+                SaveButton.Enabled = false;
             }
         }
 
@@ -127,9 +141,10 @@ namespace ObjectOrientedPractics.View.Tabs
             }
 
             _selectedIndex = CustomersListBox.SelectedIndex;
-            _cloneCurrentCustomer = (Model.Customer)_customersList[_selectedIndex].Clone();
+            _cloneCurrentCustomer = (Customer)_customersList[_selectedIndex].Clone();
             ToggleInputBoxes(true);
             SaveButton.Visible = true;
+            SaveButton.Enabled = true;
         }
 
         private void FullNameTextBox_TextChanged(object sender, EventArgs e)
@@ -160,34 +175,6 @@ namespace ObjectOrientedPractics.View.Tabs
             }
         }
 
-        private void AddressTextBox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(AddressTextBox.Text))
-                {
-                    _cloneCurrentCustomer.Address = AddressTextBox.Text;
-                    AddressTextBox.BackColor = Color.White;
-                    _isValidAddress = true;
-                    CheckData();
-                    return;
-                }
-
-                else
-                {
-                    AddressTextBox.BackColor = Color.LightPink;
-                    _isValidAddress = false;
-                    CheckData();
-                }
-            }
-            catch (ArgumentException)
-            {
-                AddressTextBox.BackColor = Color.LightPink;
-                _isValidAddress = false;
-                CheckData();
-            }
-        }
-
         private void RemoveButton_Click(object sender, EventArgs e)
         {
             if (CustomersListBox.Items.Count == 0 || CustomersListBox.SelectedIndex == -1)
@@ -197,7 +184,6 @@ namespace ObjectOrientedPractics.View.Tabs
             _currentCustomer = _customersList[CustomersListBox.SelectedIndex];
             _customersList.Remove(_currentCustomer);
             CustomersListBox.SelectedIndex = -1;
-            SaveCustomer();
             Sort();
             ClearCustomerInfo();
         }
@@ -207,12 +193,11 @@ namespace ObjectOrientedPractics.View.Tabs
         /// </summary>
         private void ClearCustomerInfo()
         {
-
-            FullNameTextBox.Text = string.Empty;
+            AddressControl.AddressClear();
+            FullNameTextBox.Clear();
             FullNameTextBox.BackColor = Color.White;
-            AddressTextBox.Text = string.Empty;
-            AddressTextBox.BackColor = Color.White;
-            IdTextBox.Text = string.Empty;
+            IdTextBox.Clear();
+            SaveButton.Enabled = false;
         }
 
         /// <summary>
@@ -222,7 +207,7 @@ namespace ObjectOrientedPractics.View.Tabs
         private void ToggleInputBoxes(bool value)
         {
             FullNameTextBox.Enabled = value;
-            AddressTextBox.Enabled = value;
+            AddressControl.Enabled = value;
             SaveButton.Visible = value;
         }
 
@@ -234,34 +219,10 @@ namespace ObjectOrientedPractics.View.Tabs
         {
             _indexBeforeSort = CustomersListBox.SelectedIndex;
             CustomersListBox.SelectedIndexChanged -= CustomersListBox_SelectedIndexChanged;
-            _customersList = _customersList.OrderBy(song => song.ToString()).ToList();
+            _customersList = _customersList.OrderBy((Customer) => Customer.ToString()).ToList();
             CustomersListBox.DataSource = _customersList;
             CustomersListBox.SelectedIndex = _indexBeforeSort;
             CustomersListBox.SelectedIndexChanged += CustomersListBox_SelectedIndexChanged;
-        }
-
-        /// <summary>
-        /// Метод для сохранения данных в json файл.
-        /// </summary>
-        public void SaveCustomer()
-        {
-            if (CustomersListBox.Items.Count != 0)
-            {
-                var jsonString = System.Text.Json.JsonSerializer.Serialize(_customersList);
-                File.WriteAllText("Customers.json", jsonString);
-            }
-        }
-
-        /// <summary>
-        /// Метод, которых загружает сохраненные данные.
-        /// </summary>
-        private void LoadCustomersInfo()
-        {
-            if (File.Exists(_fileName))
-            {
-                _customersList = JsonConvert.DeserializeObject<List<Customer>>(File.ReadAllText(_fileName));
-                Sort();
-            }
         }
 
         /// <summary>
@@ -270,7 +231,7 @@ namespace ObjectOrientedPractics.View.Tabs
         private void UpdateCustomerInfo()
         {
             FullNameTextBox.Text = _currentCustomer.Fullname.ToString();
-            AddressTextBox.Text = _currentCustomer.Address.ToString();
+            AddressControl.Address = _currentCustomer.Address;
         }
 
         /// <summary>
