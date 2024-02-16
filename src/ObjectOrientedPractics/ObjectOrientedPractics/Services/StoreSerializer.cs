@@ -9,7 +9,7 @@ namespace ObjectOrientedPractics.Services
         /// <summary>
         /// Путь к файлу
         /// </summary>
-        private static string FilepathStore = Path.Combine(GetFolderPath(SpecialFolder.ApplicationData), @"ObjectOrientedPracticsData\ObjectOrientedPracticsData.json");
+        readonly static string FilepathStore = Path.Combine(GetFolderPath(SpecialFolder.ApplicationData), @"26\26.json");
 
         /// <summary>
         /// Метод для сохранения данных в json файл.
@@ -19,10 +19,10 @@ namespace ObjectOrientedPractics.Services
         {
             var jsonString = System.Text.Json.JsonSerializer.Serialize(store);
             if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(
-                        SpecialFolder.ApplicationData), @"ObjectOrientedPracticsData")))
+                        SpecialFolder.ApplicationData), @"26")))
             {
                 Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(
-                    SpecialFolder.ApplicationData), @"ObjectOrientedPracticsData"));
+                    SpecialFolder.ApplicationData), @"26"));
             }
             File.WriteAllText(FilepathStore, jsonString);
         }
