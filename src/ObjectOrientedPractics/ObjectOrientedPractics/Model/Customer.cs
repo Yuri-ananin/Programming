@@ -9,9 +9,14 @@ namespace ObjectOrientedPractics.Model
     internal class Customer: ICloneable
     {
         /// <summary>
+        /// Id покупателя.
+        /// </summary>
+        private int _id;
+
+        /// <summary>
         /// Счётчик для <see cref="Customer"/>.
         /// </summary>
-        private static int _counter = 0;
+        private static int _idCounter = 0;
 
         /// <summary>
         /// Полное имя покупателя.
@@ -22,6 +27,61 @@ namespace ObjectOrientedPractics.Model
         /// Адрес доставки для покупателя.
         /// </summary>
         private Address _address = new Address();
+
+        /// <summary>
+        /// Корзина товаров покупателя.
+        /// </summary>
+        private Cart _cart = new Cart();
+
+        /// <summary>
+        /// Список заказов покупателя.
+        /// </summary>
+        private List<Order> _orders = new List<Order>();
+
+        /// <summary>
+        /// Возвращает id покупателя.
+        /// </summary>
+        [JsonProperty(nameof(Id))]
+        public int Id
+        {
+            get
+            {
+                return _id;
+            }
+            private set
+            {
+                _id = value;
+            }
+        }
+        /// <summary>
+        /// Возвращает и задает список заказов покупателя.
+        /// </summary>
+        public List<Order> Orders
+        {
+            get
+            {
+                return _orders;
+            }
+            set
+            {
+                _orders = value;
+            }
+        }
+
+        /// <summary>
+        /// Возвращает и задает корзину товаров покупателя.
+        /// </summary>
+        public Cart Cart
+        {
+            get
+            {
+                return _cart;
+            }
+            set
+            {
+                _cart = value;
+            }
+        }
 
         /// <summary>
         /// Возвращает и задает полное имя покупателя.
@@ -55,25 +115,19 @@ namespace ObjectOrientedPractics.Model
         }
 
         /// <summary>
-        /// Возвращает и задаёт счётчик покупателей.
+        /// Возвращает и задаёт счетчик покупателей.
         /// </summary>
-        public int Counter
+        public int IdCounter
         {
             get
             {
-                return _counter;
+                return _idCounter;
             }
             set
             {
-                _counter = value;
+                _idCounter = value;
             }
         }
-
-        /// <summary>
-        /// Возвращает и задает Id покупателя.
-        /// </summary>
-        [JsonProperty(nameof(Id))]
-        public int Id { get; private set; }
 
         /// <summary>
         /// Создает пустой экземпляр класса <see cref="Customer"/>.
@@ -95,8 +149,9 @@ namespace ObjectOrientedPractics.Model
         {
             Fullname = fullname;  
             Address = address;
-            Counter++;
-            Id = _counter;
+            IdCounter++;
+            Id = _idCounter;
+            Cart = new Cart();
         }
 
         /// <summary>

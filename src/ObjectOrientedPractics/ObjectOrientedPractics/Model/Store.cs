@@ -11,12 +11,12 @@ namespace ObjectOrientedPractics.Model
         /// <summary>
         /// Список товаров.
         /// </summary>
-        List<Item> _items = new();
+        List<Item> _items = new List<Item>();
 
         /// <summary>
         /// Список покупателей.
         /// </summary>
-        List<Customer> _customers = new();
+        List<Customer> _customers = new List<Customer>();
 
         /// <summary>
         /// Возвращает и задает список товаров.
