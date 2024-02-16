@@ -118,25 +118,28 @@
             // 
             // StreetTextBox
             // 
+            StreetTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             StreetTextBox.Location = new Point(77, 86);
             StreetTextBox.Name = "StreetTextBox";
-            StreetTextBox.Size = new Size(540, 23);
+            StreetTextBox.Size = new Size(539, 23);
             StreetTextBox.TabIndex = 8;
             StreetTextBox.TextChanged += StreetTextBox_TextChanged;
             // 
             // CityTextBox
             // 
+            CityTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             CityTextBox.Location = new Point(297, 57);
             CityTextBox.Name = "CityTextBox";
-            CityTextBox.Size = new Size(320, 23);
+            CityTextBox.Size = new Size(319, 23);
             CityTextBox.TabIndex = 9;
             CityTextBox.TextChanged += CityTextBox_TextChanged;
             // 
             // ApartmentTextBox
             // 
+            ApartmentTextBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             ApartmentTextBox.Location = new Point(269, 120);
             ApartmentTextBox.Name = "ApartmentTextBox";
-            ApartmentTextBox.Size = new Size(91, 23);
+            ApartmentTextBox.Size = new Size(345, 23);
             ApartmentTextBox.TabIndex = 10;
             ApartmentTextBox.TextChanged += ApartmentTextBox_TextChanged;
             // 
@@ -165,7 +168,7 @@
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(621, 151);
+            groupBox1.Size = new Size(620, 151);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Delivery Address";
@@ -176,7 +179,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(groupBox1);
             Name = "AddressControl";
-            Size = new Size(621, 151);
+            Size = new Size(620, 151);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ResumeLayout(false);

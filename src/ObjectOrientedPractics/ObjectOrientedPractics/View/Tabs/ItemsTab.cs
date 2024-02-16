@@ -205,8 +205,6 @@ namespace ObjectOrientedPractics.View.Tabs
             }
         }
 
-
-
         private void NameTextBox_TextChanged(object sender, EventArgs e)
         {
             try

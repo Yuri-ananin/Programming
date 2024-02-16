@@ -14,6 +14,11 @@ namespace ObjectOrientedPractics.Model
     internal class Item: ICloneable
     {
         /// <summary>
+        /// Id товара.
+        /// </summary>
+        private int _id;
+
+        /// <summary>
         /// Наименование товара.
         /// </summary>
         private string _name;
@@ -42,7 +47,17 @@ namespace ObjectOrientedPractics.Model
         /// Возвращает и задает Id товара.
         /// </summary>
         [JsonProperty(nameof(Id))]
-        public int Id { get; private set; }
+        public int Id
+        {
+            get
+            {
+                return _id;
+            }
+            private set
+            {
+                _id = value;
+            }
+        }
 
         /// <summary>
         /// Возвращает и задает Наименование товара.

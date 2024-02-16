@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Model.Address address2 = new Model.Address();
+            Model.Address address1 = new Model.Address();
             CustomersGroupBox = new GroupBox();
+            AddressControl = new Controls.AddressControl();
             FullNameTextBox = new TextBox();
             IdTextBox = new TextBox();
             label2 = new Label();
@@ -39,7 +40,6 @@
             EditButton = new Button();
             SaveButton = new Button();
             CustomersListBox = new ListBox();
-            AddressControl = new Controls.AddressControl();
             CustomersGroupBox.SuspendLayout();
             SuspendLayout();
             // 
@@ -58,17 +58,32 @@
             CustomersGroupBox.Dock = DockStyle.Fill;
             CustomersGroupBox.Location = new Point(0, 0);
             CustomersGroupBox.Name = "CustomersGroupBox";
-            CustomersGroupBox.Size = new Size(810, 567);
+            CustomersGroupBox.Size = new Size(807, 567);
             CustomersGroupBox.TabIndex = 0;
             CustomersGroupBox.TabStop = false;
             CustomersGroupBox.Text = "Customers";
+            // 
+            // AddressControl
+            // 
+            address1.Apartment = null;
+            address1.Building = null;
+            address1.City = null;
+            address1.Country = null;
+            address1.Index = 0;
+            address1.Street = null;
+            AddressControl.Address = address1;
+            AddressControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            AddressControl.Location = new Point(303, 89);
+            AddressControl.Name = "AddressControl";
+            AddressControl.Size = new Size(497, 151);
+            AddressControl.TabIndex = 1;
             // 
             // FullNameTextBox
             // 
             FullNameTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             FullNameTextBox.Location = new Point(373, 60);
             FullNameTextBox.Name = "FullNameTextBox";
-            FullNameTextBox.Size = new Size(431, 23);
+            FullNameTextBox.Size = new Size(428, 23);
             FullNameTextBox.TabIndex = 9;
             FullNameTextBox.TextChanged += FullNameTextBox_TextChanged;
             // 
@@ -152,27 +167,13 @@
             CustomersListBox.TabIndex = 0;
             CustomersListBox.SelectedIndexChanged += CustomersListBox_SelectedIndexChanged;
             // 
-            // AddressControl
-            // 
-            address2.Apartment = null;
-            address2.Building = null;
-            address2.City = null;
-            address2.Country = null;
-            address2.Index = 0;
-            address2.Street = null;
-            AddressControl.Address = address2;
-            AddressControl.Location = new Point(303, 89);
-            AddressControl.Name = "AddressControl";
-            AddressControl.Size = new Size(497, 151);
-            AddressControl.TabIndex = 1;
-            // 
             // CustomersTab
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(CustomersGroupBox);
             Name = "CustomersTab";
-            Size = new Size(810, 567);
+            Size = new Size(807, 567);
             CustomersGroupBox.ResumeLayout(false);
             CustomersGroupBox.PerformLayout();
             ResumeLayout(false);

@@ -9,16 +9,34 @@ namespace ObjectOrientedPractics.View.Controls
         /// </summary>
         private Address _address = new Address();
 
+        /// <summary>
+        /// Поле для проверки заполнения почтового индекса.
+        /// </summary>
         private bool _isValidPostIndex = false;
 
+        /// <summary>
+        /// Поле для проверки заполнения страны.
+        /// </summary>
         private bool _isValidCountry = false;
 
+        /// <summary>
+        /// Поле для проверки заполнения города.
+        /// </summary>
         private bool _isValidCity = false;
 
+        /// <summary>
+        /// Поле для проверки заполнения улицы.
+        /// </summary>
         private bool _isValidStreet = false;
 
+        /// <summary>
+        /// Поле для проверки заполнения номера строения.
+        /// </summary>
         private bool _isValidBuilding = false;
 
+        /// <summary>
+        /// Поле для проверки заполнения номера квартиры.
+        /// </summary>
         private bool _isValidApartment = false;
 
         /// <summary>
