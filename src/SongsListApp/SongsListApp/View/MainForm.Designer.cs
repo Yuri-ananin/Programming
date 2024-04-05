@@ -40,14 +40,15 @@
             SongsControl.Size = new Size(705, 451);
             SongsControl.TabIndex = 0;
             // 
-            // Form1
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(705, 451);
             Controls.Add(SongsControl);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "Form1";
+            MinimumSize = new Size(721, 490);
+            Name = "MainForm";
             Text = "SongsApp";
             ResumeLayout(false);
         }

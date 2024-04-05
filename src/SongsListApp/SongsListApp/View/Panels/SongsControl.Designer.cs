@@ -125,7 +125,7 @@
             AddButton.FlatAppearance.BorderSize = 0;
             AddButton.FlatStyle = FlatStyle.Flat;
             AddButton.Image = Properties.Resources.music_player__1_1;
-            AddButton.Location = new Point(6, 379);
+            AddButton.Location = new Point(3, 374);
             AddButton.Name = "AddButton";
             AddButton.Size = new Size(40, 40);
             AddButton.TabIndex = 1;
@@ -150,7 +150,7 @@
             EditButton.FlatAppearance.BorderSize = 0;
             EditButton.FlatStyle = FlatStyle.Flat;
             EditButton.Image = Properties.Resources.draw__1_;
-            EditButton.Location = new Point(204, 380);
+            EditButton.Location = new Point(204, 374);
             EditButton.Name = "EditButton";
             EditButton.Size = new Size(40, 40);
             EditButton.TabIndex = 10;
@@ -163,7 +163,7 @@
             RemoveButton.FlatAppearance.BorderSize = 0;
             RemoveButton.FlatStyle = FlatStyle.Flat;
             RemoveButton.Image = Properties.Resources.remove__1_;
-            RemoveButton.Location = new Point(105, 379);
+            RemoveButton.Location = new Point(103, 374);
             RemoveButton.Name = "RemoveButton";
             RemoveButton.Size = new Size(40, 40);
             RemoveButton.TabIndex = 9;

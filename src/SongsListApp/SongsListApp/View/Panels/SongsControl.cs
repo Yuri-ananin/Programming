@@ -70,7 +70,7 @@ namespace SongsListApp
 
         private void GenreComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
             if (SongGenreComboBox.SelectedIndex != -1 && _cloneCurrentSong.Genre != null)
             {
                 Enum.Parse(typeof(Genre), _cloneCurrentSong.Genre);
