@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             CartsGroupBox = new GroupBox();
-            CustomerComboBox = new ComboBox();
+            CustomersComboBox = new ComboBox();
             PriceLabel = new Label();
             AmountLabel = new Label();
             ClearButton = new Button();
@@ -45,7 +45,7 @@
             // 
             // CartsGroupBox
             // 
-            CartsGroupBox.Controls.Add(CustomerComboBox);
+            CartsGroupBox.Controls.Add(CustomersComboBox);
             CartsGroupBox.Controls.Add(PriceLabel);
             CartsGroupBox.Controls.Add(AmountLabel);
             CartsGroupBox.Controls.Add(ClearButton);
@@ -64,15 +64,15 @@
             CartsGroupBox.TabStop = false;
             CartsGroupBox.Text = "Carts";
             // 
-            // CustomerComboBox
+            // CustomersComboBox
             // 
-            CustomerComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            CustomerComboBox.FormattingEnabled = true;
-            CustomerComboBox.Location = new Point(425, 23);
-            CustomerComboBox.Name = "CustomerComboBox";
-            CustomerComboBox.Size = new Size(466, 23);
-            CustomerComboBox.TabIndex = 11;
-            CustomerComboBox.SelectedIndexChanged += CustomerComboBox_SelectedIndexChanged;
+            CustomersComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            CustomersComboBox.FormattingEnabled = true;
+            CustomersComboBox.Location = new Point(425, 23);
+            CustomersComboBox.Name = "CustomersComboBox";
+            CustomersComboBox.Size = new Size(466, 23);
+            CustomersComboBox.TabIndex = 11;
+            CustomersComboBox.SelectedIndexChanged += CustomerComboBox_SelectedIndexChanged;
             // 
             // PriceLabel
             // 
@@ -201,6 +201,6 @@
         private Button CreateButton;
         private ListBox CartListBox;
         private Label CartLabel;
-        private ComboBox CustomerComboBox;
+        private ComboBox CustomersComboBox;
     }
 }

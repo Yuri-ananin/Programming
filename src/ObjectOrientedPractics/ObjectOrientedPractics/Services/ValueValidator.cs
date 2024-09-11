@@ -23,6 +23,21 @@
         }
 
         /// <summary>
+        /// Проверяет вещественное число на нахождение в диапазоне.
+        /// </summary>
+        /// <param name="value"> Проверяемое число. </param>
+        /// <param name="maxValue"> Максимальное значение.</param>
+        /// <param name="maxValue"> Минимальное значение. </param>
+        /// <param name="propertyName"> Название проверяемого поля. </param>
+        public static void AssertDoubleInRange(double value, double maxValue, double minValue, string propertyName)
+        {
+            if (value > maxValue || value < minValue)
+            {
+                throw new ArgumentException($"{propertyName} не может быть меньше {minValue} и больше {maxValue}.");
+            }
+        }
+
+        /// <summary>
         /// Проверка целочисленного значения на нахождение в интервале.
         /// </summary>
         /// <param name="value">Передаваемое значение.</param>

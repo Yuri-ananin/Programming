@@ -30,6 +30,7 @@
         {
             Model.Address address1 = new Model.Address();
             CustomersGroupBox = new GroupBox();
+            PriorityCheckBox = new CheckBox();
             AddressControl = new Controls.AddressControl();
             FullNameTextBox = new TextBox();
             IdTextBox = new TextBox();
@@ -45,6 +46,7 @@
             // 
             // CustomersGroupBox
             // 
+            CustomersGroupBox.Controls.Add(PriorityCheckBox);
             CustomersGroupBox.Controls.Add(AddressControl);
             CustomersGroupBox.Controls.Add(FullNameTextBox);
             CustomersGroupBox.Controls.Add(IdTextBox);
@@ -63,6 +65,17 @@
             CustomersGroupBox.TabStop = false;
             CustomersGroupBox.Text = "Customers";
             // 
+            // PriorityCheckBox
+            // 
+            PriorityCheckBox.AutoSize = true;
+            PriorityCheckBox.Location = new Point(303, 96);
+            PriorityCheckBox.Name = "PriorityCheckBox";
+            PriorityCheckBox.Size = new Size(75, 19);
+            PriorityCheckBox.TabIndex = 10;
+            PriorityCheckBox.Text = "Is Priority";
+            PriorityCheckBox.UseVisualStyleBackColor = true;
+            PriorityCheckBox.CheckedChanged += PriorityCheckBox_CheckedChanged;
+            // 
             // AddressControl
             // 
             address1.Apartment = null;
@@ -73,7 +86,7 @@
             address1.Street = null;
             AddressControl.Address = address1;
             AddressControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            AddressControl.Location = new Point(303, 89);
+            AddressControl.Location = new Point(303, 121);
             AddressControl.Name = "AddressControl";
             AddressControl.Size = new Size(497, 151);
             AddressControl.TabIndex = 1;
@@ -89,6 +102,7 @@
             // 
             // IdTextBox
             // 
+            IdTextBox.Enabled = false;
             IdTextBox.Location = new Point(373, 32);
             IdTextBox.Name = "IdTextBox";
             IdTextBox.Size = new Size(121, 23);
@@ -192,5 +206,6 @@
         private Label label1;
         private TextBox FullNameTextBox;
         private Controls.AddressControl AddressControl;
+        private CheckBox PriorityCheckBox;
     }
 }
