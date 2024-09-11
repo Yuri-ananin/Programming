@@ -102,10 +102,7 @@ namespace ObjectOrientedPractics.Model
             }
             set
             {
-                if (value < 0 || value > 100000)
-                {
-                    throw new ArgumentException("Недопустимая стоимость товара");
-                }
+                ValueValidator.AssertDoubleInRange(value, 100_000.0, 0.0, "Cost");
                 _cost = value;
             }
         }
@@ -167,6 +164,21 @@ namespace ObjectOrientedPractics.Model
         public object Clone()
         {
             return MemberwiseClone();
+        }
+
+        /// <summary>
+        /// Генерирует случайный товар.
+        /// </summary>
+        /// <returns>Случайный товар.</returns>
+        public static Item GenerateRandomItem()
+        {
+            Random random = new Random();
+            string name = $"Item ({_counter + 1}).";
+            string info = "Info about item.";
+            int cost = random.Next(0, 10000);
+            Category category = (Category)random.Next(0,
+                Enum.GetNames(typeof(DesiredDeliveryTime)).Length);
+            return new Item(name, info, cost, category);
         }
     }
 }

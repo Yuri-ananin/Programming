@@ -30,7 +30,7 @@ namespace ObjectOrientedPractics.Model
         /// <summary>
         /// Общая стоимость товаров в заказе.
         /// </summary>
-        private double _amount;
+        protected double _amount;
 
         /// <summary>
         /// Адрес доставки.
@@ -100,17 +100,17 @@ namespace ObjectOrientedPractics.Model
         }
 
         /// <summary>
-        /// Возвращает и задает общую стоимость товаров в заказе.
+        /// Возвращает и задает общую стоимость товаров.
         /// </summary>
         public double Amount
         {
             get
             {
-                return _amount;
-            }
-            set
-            {
-                _amount = value;
+                if (Items == null || Items.Count == 0)
+                {
+                    return 0.0;
+                }
+                return Items.Sum(item => item.Cost);
             }
         }
 
@@ -154,7 +154,6 @@ namespace ObjectOrientedPractics.Model
             Date = date;
             Address = address;
             Items = cart.Items;
-            Amount = cart.Amount;
             OrderStatus = orderStatus;
             AllOrdersCount++;
             Id = _allOrdersCount;

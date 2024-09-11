@@ -37,20 +37,25 @@
             OrderStatusColumn = new DataGridViewTextBoxColumn();
             AmountColumn = new DataGridViewTextBoxColumn();
             OrdersGroupBox = new GroupBox();
-            PriceLabel = new Label();
+            PriorityOptionsLabel = new Label();
+            DeliveryTimeLabel = new Label();
+            DeliveryTimeComboBox = new ComboBox();
+            AmountCostLabel = new Label();
             AmountLabel = new Label();
             OrderItemsListBox = new ListBox();
             OrderItemsLabel = new Label();
             DeliveryAddressControl = new Controls.AddressControl();
             StatusComboBox = new ComboBox();
-            DateTextBox = new TextBox();
+            CreatedTextBox = new TextBox();
             IdTextBox = new TextBox();
             SelectedOrderLabel = new Label();
             StatusLabel = new Label();
             DateLabel = new Label();
             IdLabel = new Label();
+            PriorityOptionsPanel = new Panel();
             ((System.ComponentModel.ISupportInitialize)OrdersDataGridView).BeginInit();
             OrdersGroupBox.SuspendLayout();
+            PriorityOptionsPanel.SuspendLayout();
             SuspendLayout();
             // 
             // OrdersDataGridView
@@ -113,13 +118,14 @@
             // 
             // OrdersGroupBox
             // 
-            OrdersGroupBox.Controls.Add(PriceLabel);
+            OrdersGroupBox.Controls.Add(PriorityOptionsPanel);
+            OrdersGroupBox.Controls.Add(AmountCostLabel);
             OrdersGroupBox.Controls.Add(AmountLabel);
             OrdersGroupBox.Controls.Add(OrderItemsListBox);
             OrdersGroupBox.Controls.Add(OrderItemsLabel);
             OrdersGroupBox.Controls.Add(DeliveryAddressControl);
             OrdersGroupBox.Controls.Add(StatusComboBox);
-            OrdersGroupBox.Controls.Add(DateTextBox);
+            OrdersGroupBox.Controls.Add(CreatedTextBox);
             OrdersGroupBox.Controls.Add(IdTextBox);
             OrdersGroupBox.Controls.Add(SelectedOrderLabel);
             OrdersGroupBox.Controls.Add(StatusLabel);
@@ -133,14 +139,41 @@
             OrdersGroupBox.TabStop = false;
             OrdersGroupBox.Text = "Orders";
             // 
-            // PriceLabel
+            // PriorityOptionsLabel
             // 
-            PriceLabel.AutoSize = true;
-            PriceLabel.Location = new Point(889, 547);
-            PriceLabel.Name = "PriceLabel";
-            PriceLabel.Size = new Size(13, 15);
-            PriceLabel.TabIndex = 12;
-            PriceLabel.Text = "0";
+            PriorityOptionsLabel.AutoSize = true;
+            PriorityOptionsLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            PriorityOptionsLabel.Location = new Point(3, 8);
+            PriorityOptionsLabel.Name = "PriorityOptionsLabel";
+            PriorityOptionsLabel.Size = new Size(94, 15);
+            PriorityOptionsLabel.TabIndex = 2;
+            PriorityOptionsLabel.Text = "Priority Options";
+            // 
+            // DeliveryTimeLabel
+            // 
+            DeliveryTimeLabel.AutoSize = true;
+            DeliveryTimeLabel.Location = new Point(3, 32);
+            DeliveryTimeLabel.Name = "DeliveryTimeLabel";
+            DeliveryTimeLabel.Size = new Size(81, 15);
+            DeliveryTimeLabel.TabIndex = 3;
+            DeliveryTimeLabel.Text = "Delivery Time:";
+            // 
+            // DeliveryTimeComboBox
+            // 
+            DeliveryTimeComboBox.FormattingEnabled = true;
+            DeliveryTimeComboBox.Location = new Point(90, 29);
+            DeliveryTimeComboBox.Name = "DeliveryTimeComboBox";
+            DeliveryTimeComboBox.Size = new Size(121, 23);
+            DeliveryTimeComboBox.TabIndex = 4;
+            // 
+            // AmountCostLabel
+            // 
+            AmountCostLabel.AutoSize = true;
+            AmountCostLabel.Location = new Point(889, 547);
+            AmountCostLabel.Name = "AmountCostLabel";
+            AmountCostLabel.Size = new Size(13, 15);
+            AmountCostLabel.TabIndex = 12;
+            AmountCostLabel.Text = "0";
             // 
             // AmountLabel
             // 
@@ -195,13 +228,13 @@
             StatusComboBox.TabIndex = 7;
             StatusComboBox.SelectedIndexChanged += StatusComboBox_SelectedIndexChanged;
             // 
-            // DateTextBox
+            // CreatedTextBox
             // 
-            DateTextBox.Enabled = false;
-            DateTextBox.Location = new Point(495, 82);
-            DateTextBox.Name = "DateTextBox";
-            DateTextBox.Size = new Size(121, 23);
-            DateTextBox.TabIndex = 6;
+            CreatedTextBox.Enabled = false;
+            CreatedTextBox.Location = new Point(495, 82);
+            CreatedTextBox.Name = "CreatedTextBox";
+            CreatedTextBox.Size = new Size(121, 23);
+            CreatedTextBox.TabIndex = 6;
             // 
             // IdTextBox
             // 
@@ -247,6 +280,16 @@
             IdLabel.TabIndex = 1;
             IdLabel.Text = "ID:";
             // 
+            // PriorityOptionsPanel
+            // 
+            PriorityOptionsPanel.Controls.Add(PriorityOptionsLabel);
+            PriorityOptionsPanel.Controls.Add(DeliveryTimeComboBox);
+            PriorityOptionsPanel.Controls.Add(DeliveryTimeLabel);
+            PriorityOptionsPanel.Location = new Point(622, 14);
+            PriorityOptionsPanel.Name = "PriorityOptionsPanel";
+            PriorityOptionsPanel.Size = new Size(292, 132);
+            PriorityOptionsPanel.TabIndex = 13;
+            // 
             // OrdersTab
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -257,6 +300,8 @@
             ((System.ComponentModel.ISupportInitialize)OrdersDataGridView).EndInit();
             OrdersGroupBox.ResumeLayout(false);
             OrdersGroupBox.PerformLayout();
+            PriorityOptionsPanel.ResumeLayout(false);
+            PriorityOptionsPanel.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -265,14 +310,14 @@
         private DataGridView OrdersDataGridView;
         private GroupBox OrdersGroupBox;
         private ComboBox StatusComboBox;
-        private TextBox DateTextBox;
+        private TextBox CreatedTextBox;
         private TextBox IdTextBox;
         private Label SelectedOrderLabel;
         private Label StatusLabel;
         private Label DateLabel;
         private Label IdLabel;
         private Controls.AddressControl DeliveryAddressControl;
-        private Label PriceLabel;
+        private Label AmountCostLabel;
         private Label AmountLabel;
         private ListBox OrderItemsListBox;
         private Label OrderItemsLabel;
@@ -282,5 +327,9 @@
         private DataGridViewTextBoxColumn Address;
         private DataGridViewTextBoxColumn OrderStatusColumn;
         private DataGridViewTextBoxColumn AmountColumn;
+        private Label PriorityOptionsLabel;
+        private Label DeliveryTimeLabel;
+        private ComboBox DeliveryTimeComboBox;
+        private Panel PriorityOptionsPanel;
     }
 }

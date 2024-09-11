@@ -64,7 +64,6 @@ namespace ObjectOrientedPractics.View.Tabs
         public CustomersTab()
         {
             InitializeComponent();
-            IdTextBox.Enabled = false;
             ToggleInputBoxes(false);
             AddressControl.Address = _currentCustomer.Address;
         }
@@ -87,6 +86,7 @@ namespace ObjectOrientedPractics.View.Tabs
                   AddressControl.Address.City, AddressControl.Address.Street,
                   AddressControl.Address.Building, AddressControl.Address.Apartment);
                     _currentCustomer = new Customer(FullNameTextBox.Text, address);
+                    _currentCustomer.IsPriority = PriorityCheckBox.Checked;
                     _customersList.Add(_currentCustomer);
                     Sort();
                     ToggleInputBoxes(false);
@@ -116,12 +116,19 @@ namespace ObjectOrientedPractics.View.Tabs
         {
             if (CustomersListBox.SelectedIndex != -1)
             {
+                _selectedIndex = CustomersListBox.SelectedIndex;
                 ToggleInputBoxes(false);
                 _cloneCurrentCustomer = (Customer)_customersList[CustomersListBox.SelectedIndex].Clone();
-                FullNameTextBox.Text = _cloneCurrentCustomer.Fullname.ToString();
+                FullNameTextBox.Text = _cloneCurrentCustomer.Fullname;
                 AddressControl.Address = _cloneCurrentCustomer.Address;
                 IdTextBox.Text = _cloneCurrentCustomer.Id.ToString();
+                PriorityCheckBox.Checked = _cloneCurrentCustomer.IsPriority;
+                EditButton.Enabled = true;
                 SaveButton.Enabled = false;
+            }
+            else
+            {
+                EditButton.Enabled = false;
             }
         }
 
@@ -188,6 +195,14 @@ namespace ObjectOrientedPractics.View.Tabs
             ClearCustomerInfo();
         }
 
+        private void PriorityCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CustomersListBox.SelectedIndex != -1)
+            {
+                _cloneCurrentCustomer.IsPriority = PriorityCheckBox.Checked;
+            }
+        }
+
         /// <summary>
         /// Метод, который очищает все TextBox.
         /// </summary>
@@ -197,6 +212,7 @@ namespace ObjectOrientedPractics.View.Tabs
             FullNameTextBox.Clear();
             FullNameTextBox.BackColor = Color.White;
             IdTextBox.Clear();
+            PriorityCheckBox.Enabled = false;
             SaveButton.Enabled = false;
         }
 
@@ -209,6 +225,7 @@ namespace ObjectOrientedPractics.View.Tabs
             FullNameTextBox.Enabled = value;
             AddressControl.Enabled = value;
             SaveButton.Visible = value;
+            PriorityCheckBox.Enabled = value;
         }
 
         /// <summary>
@@ -232,6 +249,8 @@ namespace ObjectOrientedPractics.View.Tabs
         {
             FullNameTextBox.Text = _currentCustomer.Fullname.ToString();
             AddressControl.Address = _currentCustomer.Address;
+            IdTextBox.Text = _currentCustomer.Id.ToString();
+            PriorityCheckBox.Checked = _currentCustomer.IsPriority;
         }
 
         /// <summary>

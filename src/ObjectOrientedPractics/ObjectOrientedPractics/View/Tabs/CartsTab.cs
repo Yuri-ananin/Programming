@@ -24,8 +24,8 @@ namespace ObjectOrientedPractics.View.Tabs
         {
             set
             {
-                CustomerComboBox.DataSource = null;
-                CustomerComboBox.DataSource = value;
+                CustomersComboBox.DataSource = null;
+                CustomersComboBox.DataSource = value;
             }
         }
 
@@ -43,14 +43,14 @@ namespace ObjectOrientedPractics.View.Tabs
         {
             InitializeComponent();
             CartListBox.DataSource = _currentItems;
-            CustomerComboBox.SelectedIndex = -1;
+            CustomersComboBox.SelectedIndex = -1;
         }
 
         private void CustomerComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (CustomerComboBox.SelectedIndex != -1)
+            if (CustomersComboBox.SelectedIndex != -1)
             {
-                _currentCustomer = (Customer)CustomerComboBox.SelectedItem;
+                _currentCustomer = (Customer)CustomersComboBox.SelectedItem;
                 if (_currentCustomer.Cart.Items == null)
                 {
                     _currentItems = new BindingList<Item>();
@@ -67,7 +67,7 @@ namespace ObjectOrientedPractics.View.Tabs
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            if (ItemsListBox.SelectedIndex != -1 && CustomerComboBox.SelectedIndex != -1)
+            if (ItemsListBox.SelectedIndex != -1 && CustomersComboBox.SelectedIndex != -1)
             {
                 _currentItems.Add((Item)ItemsListBox.SelectedItem);
                 _currentCustomer.Cart.Items = _currentItems.ToList<Item>();
@@ -77,24 +77,36 @@ namespace ObjectOrientedPractics.View.Tabs
 
         private void RemoveButton_Click(object sender, EventArgs e)
         {
-            if (CartListBox.SelectedIndex != -1 && CustomerComboBox.SelectedIndex != -1)
+            if (CartListBox.SelectedIndex != -1 && CustomersComboBox.SelectedIndex != -1)
             {
                 _currentItems.Remove((Item)CartListBox.SelectedItem);
                 _currentCustomer.Cart.Items = _currentItems.ToList<Item>();
-                AmountLabel.Text = _currentCustomer.Cart.Amount.ToString();
+                PriceLabel.Text = _currentCustomer.Cart.Amount.ToString();
             }
         }
 
         private void CreateButton_Click(object sender, EventArgs e)
         {
+            if (CustomersComboBox.SelectedIndex != -1)
             {
-                if (CustomerComboBox.SelectedIndex != -1)
+                if (CartListBox.Items.Count == 0)
+                {
+                    return;
+                }
+
+                if (_currentCustomer.IsPriority == false)
                 {
                     _currentCustomer.Cart.Items = _currentItems.ToList<Item>();
-                    Order order = new Order(_currentCustomer.Address, _currentCustomer.Cart, OrderStatus.New, DateTime.Now.ToString());
-                    _currentCustomer.Orders.Add(order);
-                    _currentItems = null;
-                    _currentCustomer = null;
+                    _currentCustomer.Orders.Add(new Order(_currentCustomer.Address, _currentCustomer.Cart, OrderStatus.New, DateTime.Now.ToString()));
+                    _currentItems = new BindingList<Item>(); ;
+                    ClearOrder();
+                }
+
+                else
+                {
+                    _currentCustomer.Cart.Items = _currentItems.ToList<Item>();
+                    _currentCustomer.Orders.Add(new PriorityOrder(_currentCustomer.Address, _currentCustomer.Cart, OrderStatus.New, DateTime.Now.ToString()));
+                    _currentItems = new BindingList<Item>(); ;
                     ClearOrder();
                 }
             }

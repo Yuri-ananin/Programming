@@ -9,11 +9,6 @@ namespace ObjectOrientedPractics.Model
     internal class Customer: ICloneable
     {
         /// <summary>
-        /// Id покупателя.
-        /// </summary>
-        private int _id;
-
-        /// <summary>
         /// Счётчик для <see cref="Customer"/>.
         /// </summary>
         private static int _idCounter = 0;
@@ -39,20 +34,15 @@ namespace ObjectOrientedPractics.Model
         private List<Order> _orders = new List<Order>();
 
         /// <summary>
-        /// Возвращает id покупателя.
+        /// Возвращает идентификатор.
         /// </summary>
-        [JsonProperty(nameof(Id))]
-        public int Id
-        {
-            get
-            {
-                return _id;
-            }
-            private set
-            {
-                _id = value;
-            }
-        }
+        public int Id { get; }
+
+        /// <summary>
+        /// Является ли заказчик приоритетным в обслуживании.
+        /// </summary>
+        public bool IsPriority { get; set; } = false;
+
         /// <summary>
         /// Возвращает и задает список заказов покупателя.
         /// </summary>
@@ -114,27 +104,15 @@ namespace ObjectOrientedPractics.Model
             }
         }
 
-        /// <summary>
-        /// Возвращает и задаёт счетчик покупателей.
-        /// </summary>
-        public int IdCounter
-        {
-            get
-            {
-                return _idCounter;
-            }
-            set
-            {
-                _idCounter = value;
-            }
-        }
 
         /// <summary>
         /// Создает пустой экземпляр класса <see cref="Customer"/>.
         /// </summary>
         public Customer()
         {
-
+            Cart = new Cart();
+            _idCounter++;
+            Id = _idCounter;
         }
 
 
@@ -149,10 +127,11 @@ namespace ObjectOrientedPractics.Model
         {
             Fullname = fullname;  
             Address = address;
-            IdCounter++;
+            _idCounter++;
             Id = _idCounter;
             Cart = new Cart();
         }
+
 
         /// <summary>
         /// Переопределение метода ToString() для класса<see cref="Customer"/>.
