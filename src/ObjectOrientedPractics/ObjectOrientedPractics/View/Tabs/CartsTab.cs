@@ -1,6 +1,7 @@
 ﻿using ObjectOrientedPractics.Model;
+using ObjectOrientedPractics.Model.Enums;
 using System.ComponentModel;
-
+using ObjectOrientedPractics.Model.Orders;
 namespace ObjectOrientedPractics.View.Tabs
 {
     public partial class CartsTab : UserControl
@@ -39,6 +40,7 @@ namespace ObjectOrientedPractics.View.Tabs
         /// </summary>
         private BindingList<Item> _currentItems;
 
+
         public CartsTab()
         {
             InitializeComponent();
@@ -62,6 +64,14 @@ namespace ObjectOrientedPractics.View.Tabs
                 _currentCustomer.Cart.Items = _currentItems.ToList<Item>();
                 PriceLabel.Text = _currentCustomer.Cart.Amount.ToString();
                 CartListBox.DataSource = _currentItems;
+
+                DiscountsCheckedListBox.DataSource = _currentCustomer.Discounts;
+                DiscountsCheckedListBox.DisplayMember = "Info";
+
+                for (int i = 0; i < DiscountsCheckedListBox.Items.Count; i++)
+                {
+                    DiscountsCheckedListBox.SetItemChecked(i, true);
+                }
             }
         }
 
@@ -72,6 +82,7 @@ namespace ObjectOrientedPractics.View.Tabs
                 _currentItems.Add((Item)ItemsListBox.SelectedItem);
                 _currentCustomer.Cart.Items = _currentItems.ToList<Item>();
                 PriceLabel.Text = _currentCustomer.Cart.Amount.ToString();
+                RefreshDiscount();
             }
         }
 
@@ -82,6 +93,8 @@ namespace ObjectOrientedPractics.View.Tabs
                 _currentItems.Remove((Item)CartListBox.SelectedItem);
                 _currentCustomer.Cart.Items = _currentItems.ToList<Item>();
                 PriceLabel.Text = _currentCustomer.Cart.Amount.ToString();
+                CartListBox.Refresh();
+                RefreshDiscount();
             }
         }
 
@@ -97,16 +110,20 @@ namespace ObjectOrientedPractics.View.Tabs
                 if (_currentCustomer.IsPriority == false)
                 {
                     _currentCustomer.Cart.Items = _currentItems.ToList<Item>();
-                    _currentCustomer.Orders.Add(new Order(_currentCustomer.Address, _currentCustomer.Cart, OrderStatus.New, DateTime.Now.ToString()));
-                    _currentItems = new BindingList<Item>(); ;
+                    Order order = new Order(_currentCustomer.Address, _currentCustomer.Cart, OrderStatus.New, DateTime.Now.ToString());
+                    order.DiscountAmount = ApplyDiscount();
+                    order.Amount = order.Amount - order.DiscountAmount;
+                    _currentCustomer.Orders.Add(order);
                     ClearOrder();
                 }
 
                 else
                 {
                     _currentCustomer.Cart.Items = _currentItems.ToList<Item>();
-                    _currentCustomer.Orders.Add(new PriorityOrder(_currentCustomer.Address, _currentCustomer.Cart, OrderStatus.New, DateTime.Now.ToString()));
-                    _currentItems = new BindingList<Item>(); ;
+                    Order order = new PriorityOrder(_currentCustomer.Address, _currentCustomer.Cart, OrderStatus.New, DateTime.Now.ToString());
+                    order.DiscountAmount = ApplyDiscount();
+                    order.Amount = order.Amount - order.DiscountAmount;
+                    _currentCustomer.Orders.Add(order);
                     ClearOrder();
                 }
             }
@@ -118,14 +135,63 @@ namespace ObjectOrientedPractics.View.Tabs
             CartListBox.DataSource = null;
         }
 
+        private void DiscountsCheckedListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_currentCustomer.Discounts != null)
+            {
+                RefreshDiscount();
+            }
+        }
+
         /// <summary>
         /// Очистка корзины.
         /// </summary>
         private void ClearOrder()
         {
             _currentItems = new BindingList<Item>();
+            _currentCustomer.Cart.Items = _currentItems.ToList<Item>();
             CartListBox.DataSource = null;
-            PriceLabel.Text = "0.0";
+            RefreshDiscount();
+            PriceLabel.Text = "0";
+
+            DiscountsCheckedListBox.ClearSelected();
+        }
+
+        /// <summary>
+        /// Метод, который считает размер скидки.
+        /// </summary>
+        private void RefreshDiscount()
+        {
+            double discountAmount = 0;
+            for (int i = 0; i < _currentCustomer.Discounts.Count; i++)
+            {
+                discountAmount += _currentCustomer.Discounts[i].Calculate(_currentCustomer.Cart.Items);
+
+                if (!DiscountsCheckedListBox.GetItemChecked(i))
+                {
+                    discountAmount -= _currentCustomer.Discounts[i].Calculate(_currentCustomer.Cart.Items);
+                }
+            }
+            AmountDiscountLabel.Text = discountAmount.ToString();
+            TotalCostLabel.Text = (_currentCustomer.Cart.Amount - discountAmount).ToString();
+        }
+        
+        /// <summary>
+        /// Метод, который применяет скидку к товарам.
+        /// </summary>
+        /// <returns>Размер скидки.</returns>
+        private double ApplyDiscount()
+        {
+            double discountAmount = 0;
+            for (int i = 0; i < _currentCustomer.Discounts.Count; i++)
+            {
+                if (DiscountsCheckedListBox.GetItemChecked(i))
+                {
+                    discountAmount += _currentCustomer.Discounts[i].Apply(_currentCustomer.Cart.Items);
+                    _currentCustomer.Discounts[i].Update(_currentCustomer.Cart.Items);
+                }
+            }
+            return discountAmount;
         }
     }
 }

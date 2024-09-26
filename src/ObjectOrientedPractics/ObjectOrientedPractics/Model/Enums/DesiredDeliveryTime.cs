@@ -5,8 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ObjectOrientedPractics.Model
+namespace ObjectOrientedPractics.Model.Enums
 {
+    /// <summary>
+    /// Перечисление, описывающее диапазоны времени доставки.
+    /// </summary>
     public enum DesiredDeliveryTime
     {
         [Description("9:00 - 11:00")]

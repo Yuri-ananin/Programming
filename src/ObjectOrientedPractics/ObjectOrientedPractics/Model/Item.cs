@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using ObjectOrientedPractics.Model.Enums;
 using ObjectOrientedPractics.Services;
 
 namespace ObjectOrientedPractics.Model
@@ -11,7 +12,7 @@ namespace ObjectOrientedPractics.Model
     /// <summary>
     /// Класс, описывающий товар.
     /// </summary>
-    internal class Item: ICloneable
+    class Item: ICloneable
     {
         /// <summary>
         /// Id товара.
@@ -46,7 +47,6 @@ namespace ObjectOrientedPractics.Model
         /// <summary>
         /// Возвращает и задает Id товара.
         /// </summary>
-        [JsonProperty(nameof(Id))]
         public int Id
         {
             get

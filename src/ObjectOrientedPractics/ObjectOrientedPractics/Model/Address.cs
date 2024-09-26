@@ -11,7 +11,7 @@ namespace ObjectOrientedPractics.Model
     /// <summary>
     /// Класс, который описывает адрес доставки покупателю.
     /// </summary>
-    public class Address
+    public class Address: ICloneable
     {
         /// <summary>
         /// Почтовый индекс.
@@ -56,7 +56,7 @@ namespace ObjectOrientedPractics.Model
             {
                 if (value != null && value != 0)
                 {
-                    ValueValidator.AssertValueInRange(value, 100000, 999999, "Неверное значение почтового индекса." + " Шестизначное число.");
+                    ValueValidator.AssertIntInRange(value, 100000, 999999, "Неверное значение почтового индекса." + " Шестизначное число.");
                     _index = value;
                 }
             }
@@ -177,6 +177,12 @@ namespace ObjectOrientedPractics.Model
         {
             return $"Index: {Index}, Country:{Country}, City:{City}, " +
                 $"Street:{Street}, Building:{Building}, Apartment:{Apartment}";
+        }
+
+        public object Clone()
+        {
+            // Возвращаем новый объект Address с теми же значениями полей
+            return new Address(Index, Country, City, Street, Building, Apartment);
         }
     }
 }

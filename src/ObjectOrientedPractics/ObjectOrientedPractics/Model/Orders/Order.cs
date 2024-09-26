@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
+using ObjectOrientedPractics.Model.Enums;
 
-namespace ObjectOrientedPractics.Model
+namespace ObjectOrientedPractics.Model.Orders
 {
     /// <summary>
     /// Класс, описывающий заказ покупателя.
@@ -40,7 +41,7 @@ namespace ObjectOrientedPractics.Model
         /// <summary>
         /// Возвращает id заказа.
         /// </summary>
-        [JsonProperty(nameof(Id))]
+        [JsonProperty]
         public int Id
         {
             get
@@ -50,6 +51,19 @@ namespace ObjectOrientedPractics.Model
             private set
             {
                 _id = value;
+            }
+        }
+
+        /// <summary>
+        /// Возвращает и задаёт размер примерной скидки.
+        /// </summary>
+        public double DiscountAmount { get; set; }
+
+        public double Total
+        {
+            get
+            {
+                return Amount - DiscountAmount;
             }
         }
 
@@ -112,6 +126,7 @@ namespace ObjectOrientedPractics.Model
                 }
                 return Items.Sum(item => item.Cost);
             }
+            set => _amount = value;
         }
 
         /// <summary>
@@ -122,13 +137,14 @@ namespace ObjectOrientedPractics.Model
         /// <summary>
         /// Возвращает и задает счетчик заказов.
         /// </summary>
+        [JsonProperty]
         public int AllOrdersCount
         {
             get
             {
                 return _allOrdersCount;
             }
-            set
+            private set
             {
                 _allOrdersCount = value;
             }
@@ -154,6 +170,7 @@ namespace ObjectOrientedPractics.Model
             Date = date;
             Address = address;
             Items = cart.Items;
+            Amount = cart.Amount;
             OrderStatus = orderStatus;
             AllOrdersCount++;
             Id = _allOrdersCount;

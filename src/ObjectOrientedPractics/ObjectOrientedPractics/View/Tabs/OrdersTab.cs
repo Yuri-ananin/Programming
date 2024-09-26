@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ObjectOrientedPractics.Model;
+using ObjectOrientedPractics.Model.Enums;
+using ObjectOrientedPractics.Model.Orders;
 
 namespace ObjectOrientedPractics.View.Tabs
 {
@@ -60,6 +62,7 @@ namespace ObjectOrientedPractics.View.Tabs
                                 string[] currentOrder = {$"{order.Id}", $"{order.Date}", $"{customer.Fullname}", $"{order.Address}",
                                 $"{order.OrderStatus}", $"{order.Amount}"};
                                 OrdersDataGridView.Rows.Add(currentOrder);
+
                                 OrdersDataGridView.Refresh();
                             }
                         }

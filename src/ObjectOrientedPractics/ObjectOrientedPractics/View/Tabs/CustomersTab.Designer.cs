@@ -28,30 +28,37 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Model.Address address1 = new Model.Address();
+            Model.Address address2 = new Model.Address();
             CustomersGroupBox = new GroupBox();
+            DiscountsListBox = new ListBox();
+            RemoveDiscountButton = new Button();
+            AddDiscountButton = new Button();
+            DiscountsLabel = new Label();
             PriorityCheckBox = new CheckBox();
             AddressControl = new Controls.AddressControl();
             FullNameTextBox = new TextBox();
             IdTextBox = new TextBox();
-            label2 = new Label();
-            label1 = new Label();
+            FullNameLabel = new Label();
+            IdLabel = new Label();
             AddCustomerButton = new Button();
             RemoveButton = new Button();
             EditButton = new Button();
             SaveButton = new Button();
             CustomersListBox = new ListBox();
+            DiscountsPanel = new Panel();
             CustomersGroupBox.SuspendLayout();
+            DiscountsPanel.SuspendLayout();
             SuspendLayout();
             // 
             // CustomersGroupBox
             // 
+            CustomersGroupBox.Controls.Add(DiscountsPanel);
             CustomersGroupBox.Controls.Add(PriorityCheckBox);
             CustomersGroupBox.Controls.Add(AddressControl);
             CustomersGroupBox.Controls.Add(FullNameTextBox);
             CustomersGroupBox.Controls.Add(IdTextBox);
-            CustomersGroupBox.Controls.Add(label2);
-            CustomersGroupBox.Controls.Add(label1);
+            CustomersGroupBox.Controls.Add(FullNameLabel);
+            CustomersGroupBox.Controls.Add(IdLabel);
             CustomersGroupBox.Controls.Add(AddCustomerButton);
             CustomersGroupBox.Controls.Add(RemoveButton);
             CustomersGroupBox.Controls.Add(EditButton);
@@ -64,6 +71,45 @@
             CustomersGroupBox.TabIndex = 0;
             CustomersGroupBox.TabStop = false;
             CustomersGroupBox.Text = "Customers";
+            // 
+            // DiscountsListBox
+            // 
+            DiscountsListBox.FormattingEnabled = true;
+            DiscountsListBox.ItemHeight = 15;
+            DiscountsListBox.Location = new Point(3, 30);
+            DiscountsListBox.Name = "DiscountsListBox";
+            DiscountsListBox.Size = new Size(272, 109);
+            DiscountsListBox.TabIndex = 14;
+            // 
+            // RemoveDiscountButton
+            // 
+            RemoveDiscountButton.Location = new Point(281, 79);
+            RemoveDiscountButton.Name = "RemoveDiscountButton";
+            RemoveDiscountButton.Size = new Size(88, 43);
+            RemoveDiscountButton.TabIndex = 13;
+            RemoveDiscountButton.Text = "Remove";
+            RemoveDiscountButton.UseVisualStyleBackColor = true;
+            RemoveDiscountButton.Click += RemoveDiscountButton_Click;
+            // 
+            // AddDiscountButton
+            // 
+            AddDiscountButton.Location = new Point(281, 30);
+            AddDiscountButton.Name = "AddDiscountButton";
+            AddDiscountButton.Size = new Size(88, 43);
+            AddDiscountButton.TabIndex = 12;
+            AddDiscountButton.Text = "Add";
+            AddDiscountButton.UseVisualStyleBackColor = true;
+            AddDiscountButton.Click += AddDiscountButton_Click;
+            // 
+            // DiscountsLabel
+            // 
+            DiscountsLabel.AutoSize = true;
+            DiscountsLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            DiscountsLabel.Location = new Point(3, 12);
+            DiscountsLabel.Name = "DiscountsLabel";
+            DiscountsLabel.Size = new Size(61, 15);
+            DiscountsLabel.TabIndex = 11;
+            DiscountsLabel.Text = "Discounts";
             // 
             // PriorityCheckBox
             // 
@@ -78,13 +124,13 @@
             // 
             // AddressControl
             // 
-            address1.Apartment = null;
-            address1.Building = null;
-            address1.City = null;
-            address1.Country = null;
-            address1.Index = 0;
-            address1.Street = null;
-            AddressControl.Address = address1;
+            address2.Apartment = null;
+            address2.Building = null;
+            address2.City = null;
+            address2.Country = null;
+            address2.Index = 0;
+            address2.Street = null;
+            AddressControl.Address = address2;
             AddressControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             AddressControl.Location = new Point(303, 121);
             AddressControl.Name = "AddressControl";
@@ -108,23 +154,23 @@
             IdTextBox.Size = new Size(121, 23);
             IdTextBox.TabIndex = 8;
             // 
-            // label2
+            // FullNameLabel
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(303, 63);
-            label2.Name = "label2";
-            label2.Size = new Size(64, 15);
-            label2.TabIndex = 6;
-            label2.Text = "Full Name:";
+            FullNameLabel.AutoSize = true;
+            FullNameLabel.Location = new Point(303, 63);
+            FullNameLabel.Name = "FullNameLabel";
+            FullNameLabel.Size = new Size(64, 15);
+            FullNameLabel.TabIndex = 6;
+            FullNameLabel.Text = "Full Name:";
             // 
-            // label1
+            // IdLabel
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(303, 35);
-            label1.Name = "label1";
-            label1.Size = new Size(21, 15);
-            label1.TabIndex = 5;
-            label1.Text = "ID:";
+            IdLabel.AutoSize = true;
+            IdLabel.Location = new Point(303, 35);
+            IdLabel.Name = "IdLabel";
+            IdLabel.Size = new Size(21, 15);
+            IdLabel.TabIndex = 5;
+            IdLabel.Text = "ID:";
             // 
             // AddCustomerButton
             // 
@@ -181,6 +227,17 @@
             CustomersListBox.TabIndex = 0;
             CustomersListBox.SelectedIndexChanged += CustomersListBox_SelectedIndexChanged;
             // 
+            // DiscountsPanel
+            // 
+            DiscountsPanel.Controls.Add(DiscountsLabel);
+            DiscountsPanel.Controls.Add(RemoveDiscountButton);
+            DiscountsPanel.Controls.Add(DiscountsListBox);
+            DiscountsPanel.Controls.Add(AddDiscountButton);
+            DiscountsPanel.Location = new Point(303, 278);
+            DiscountsPanel.Name = "DiscountsPanel";
+            DiscountsPanel.Size = new Size(498, 146);
+            DiscountsPanel.TabIndex = 15;
+            // 
             // CustomersTab
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -190,6 +247,8 @@
             Size = new Size(807, 567);
             CustomersGroupBox.ResumeLayout(false);
             CustomersGroupBox.PerformLayout();
+            DiscountsPanel.ResumeLayout(false);
+            DiscountsPanel.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -202,10 +261,15 @@
         private Button EditButton;
         private Button SaveButton;
         private TextBox IdTextBox;
-        private Label label2;
-        private Label label1;
+        private Label FullNameLabel;
+        private Label IdLabel;
         private TextBox FullNameTextBox;
         private Controls.AddressControl AddressControl;
         private CheckBox PriorityCheckBox;
+        private ListBox DiscountsListBox;
+        private Button RemoveDiscountButton;
+        private Button AddDiscountButton;
+        private Label DiscountsLabel;
+        private Panel DiscountsPanel;
     }
 }
