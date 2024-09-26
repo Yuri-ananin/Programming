@@ -36,16 +36,16 @@
             TabControl = new TabControl();
             CartsPage = new TabPage();
             CartsTab = new View.Tabs.CartsTab();
-            tabPage1 = new TabPage();
+            OrdersTabPage = new TabPage();
             OrdersTab = new View.Tabs.OrdersTab();
-            tabPage3 = new TabPage();
+            PriorityOrdersTabPage = new TabPage();
             priorityOrdersTab1 = new View.Tabs.PriorityOrdersTab();
             tabPage2.SuspendLayout();
             ItemsPage.SuspendLayout();
             TabControl.SuspendLayout();
             CartsPage.SuspendLayout();
-            tabPage1.SuspendLayout();
-            tabPage3.SuspendLayout();
+            OrdersTabPage.SuspendLayout();
+            PriorityOrdersTabPage.SuspendLayout();
             SuspendLayout();
             // 
             // tabPage2
@@ -91,8 +91,8 @@
             TabControl.Controls.Add(ItemsPage);
             TabControl.Controls.Add(tabPage2);
             TabControl.Controls.Add(CartsPage);
-            TabControl.Controls.Add(tabPage1);
-            TabControl.Controls.Add(tabPage3);
+            TabControl.Controls.Add(OrdersTabPage);
+            TabControl.Controls.Add(PriorityOrdersTabPage);
             TabControl.Dock = DockStyle.Fill;
             TabControl.Location = new Point(0, 0);
             TabControl.Name = "TabControl";
@@ -121,16 +121,16 @@
             CartsTab.Size = new Size(936, 571);
             CartsTab.TabIndex = 0;
             // 
-            // tabPage1
+            // OrdersTabPage
             // 
-            tabPage1.Controls.Add(OrdersTab);
-            tabPage1.Location = new Point(4, 24);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(942, 577);
-            tabPage1.TabIndex = 3;
-            tabPage1.Text = "tabPage1";
-            tabPage1.UseVisualStyleBackColor = true;
+            OrdersTabPage.Controls.Add(OrdersTab);
+            OrdersTabPage.Location = new Point(4, 24);
+            OrdersTabPage.Name = "OrdersTabPage";
+            OrdersTabPage.Padding = new Padding(3);
+            OrdersTabPage.Size = new Size(942, 577);
+            OrdersTabPage.TabIndex = 3;
+            OrdersTabPage.Text = "Orders";
+            OrdersTabPage.UseVisualStyleBackColor = true;
             // 
             // OrdersTab
             // 
@@ -140,16 +140,16 @@
             OrdersTab.Size = new Size(936, 571);
             OrdersTab.TabIndex = 0;
             // 
-            // tabPage3
+            // PriorityOrdersTabPage
             // 
-            tabPage3.Controls.Add(priorityOrdersTab1);
-            tabPage3.Location = new Point(4, 24);
-            tabPage3.Name = "tabPage3";
-            tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(942, 577);
-            tabPage3.TabIndex = 4;
-            tabPage3.Text = "tabPage3";
-            tabPage3.UseVisualStyleBackColor = true;
+            PriorityOrdersTabPage.Controls.Add(priorityOrdersTab1);
+            PriorityOrdersTabPage.Location = new Point(4, 24);
+            PriorityOrdersTabPage.Name = "PriorityOrdersTabPage";
+            PriorityOrdersTabPage.Padding = new Padding(3);
+            PriorityOrdersTabPage.Size = new Size(942, 577);
+            PriorityOrdersTabPage.TabIndex = 4;
+            PriorityOrdersTabPage.Text = "Priority Orders";
+            PriorityOrdersTabPage.UseVisualStyleBackColor = true;
             // 
             // priorityOrdersTab1
             // 
@@ -174,8 +174,8 @@
             ItemsPage.ResumeLayout(false);
             TabControl.ResumeLayout(false);
             CartsPage.ResumeLayout(false);
-            tabPage1.ResumeLayout(false);
-            tabPage3.ResumeLayout(false);
+            OrdersTabPage.ResumeLayout(false);
+            PriorityOrdersTabPage.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -188,9 +188,9 @@
         private TabControl TabControl;
         private TabPage CartsPage;
         private View.Tabs.CartsTab CartsTab;
-        private TabPage tabPage1;
+        private TabPage OrdersTabPage;
         private View.Tabs.OrdersTab OrdersTab;
-        private TabPage tabPage3;
+        private TabPage PriorityOrdersTabPage;
         private View.Tabs.PriorityOrdersTab priorityOrdersTab1;
     }
 }

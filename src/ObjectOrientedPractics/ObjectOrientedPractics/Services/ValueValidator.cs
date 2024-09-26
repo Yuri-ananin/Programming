@@ -45,7 +45,7 @@
         /// <param name="max">Максимальное значение.</param>
         /// <param name="propertyName">Сообщение об ошибке.</param>
         /// <exception cref="ArgumentException"></exception>
-        public static void AssertValueInRange(int value, int min, int max, string propertyName)
+        public static void AssertIntInRange(int value, int min, int max, string propertyName)
         {
             if (value != null)
             {

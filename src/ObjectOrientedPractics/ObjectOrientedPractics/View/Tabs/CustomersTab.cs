@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using ObjectOrientedPractics.View.Controls;
-using Newtonsoft.Json;
 using ObjectOrientedPractics.Model;
+using ObjectOrientedPractics.View.Forms;
 
 namespace ObjectOrientedPractics.View.Tabs
 {
@@ -23,17 +23,12 @@ namespace ObjectOrientedPractics.View.Tabs
         /// <summary>
         /// Индекс текущего выбранного элемента.
         /// </summary>
-        private int _selectedIndex;
-
-        /// <summary>
-        /// Индекс текущего выбранного элемента перед сортировкой.
-        /// </summary>
-        private int _indexBeforeSort;
+        private int _selectedIndex = -1;
 
         /// <summary>
         /// Копия текущего покупателя.
         /// </summary>
-        private Customer _cloneCurrentCustomer = new();
+        private Customer _cloneCurrentCustomer = new Customer();
 
         /// <summary>
         /// Правильность ввода Полного Имени покупателя.
@@ -64,8 +59,11 @@ namespace ObjectOrientedPractics.View.Tabs
         public CustomersTab()
         {
             InitializeComponent();
+            Sort();
+            ClearCustomerInfo();
+            CustomersListBox.SelectedIndex = -1;
             ToggleInputBoxes(false);
-            AddressControl.Address = _currentCustomer.Address;
+            
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
@@ -81,14 +79,19 @@ namespace ObjectOrientedPractics.View.Tabs
             {
                 if (_selectedIndex == -1)
                 {
-                    Address address = new Address(AddressControl.Address.Index,
-                    AddressControl.Address.Country,
+                    _currentCustomer = new Customer(FullNameTextBox.Text,
+                   new Address(AddressControl.Address.Index, AddressControl.Address.Country,
                   AddressControl.Address.City, AddressControl.Address.Street,
-                  AddressControl.Address.Building, AddressControl.Address.Apartment);
-                    _currentCustomer = new Customer(FullNameTextBox.Text, address);
+                  AddressControl.Address.Building, AddressControl.Address.Apartment));
                     _currentCustomer.IsPriority = PriorityCheckBox.Checked;
+
+                    DiscountsListBox.DataSource = null;
+                    DiscountsListBox.DataSource = _cloneCurrentCustomer.Discounts;
+                    DiscountsListBox.DisplayMember = "Info";
+
                     _customersList.Add(_currentCustomer);
                     Sort();
+                    ClearCustomerInfo();
                     ToggleInputBoxes(false);
                     return;
                 }
@@ -98,11 +101,12 @@ namespace ObjectOrientedPractics.View.Tabs
                     _currentCustomer = _cloneCurrentCustomer;
                 }
 
+                _selectedIndex = -1;
                 Sort();
+                ClearCustomerInfo();
                 ToggleInputBoxes(false);
                 UpdateCustomerInfo();
                 CustomersListBox.ClearSelected();
-                ClearCustomerInfo();
             }
             else
             {
@@ -116,13 +120,17 @@ namespace ObjectOrientedPractics.View.Tabs
         {
             if (CustomersListBox.SelectedIndex != -1)
             {
-                _selectedIndex = CustomersListBox.SelectedIndex;
-                ToggleInputBoxes(false);
-                _cloneCurrentCustomer = (Customer)_customersList[CustomersListBox.SelectedIndex].Clone();
+                _cloneCurrentCustomer = (Customer)CustomersListBox.SelectedItem;
+                _cloneCurrentCustomer = (Customer)_cloneCurrentCustomer.Clone();
                 FullNameTextBox.Text = _cloneCurrentCustomer.Fullname;
-                AddressControl.Address = _cloneCurrentCustomer.Address;
+                AddressControl.Address = (Address)_cloneCurrentCustomer.Address.Clone();
                 IdTextBox.Text = _cloneCurrentCustomer.Id.ToString();
                 PriorityCheckBox.Checked = _cloneCurrentCustomer.IsPriority;
+
+                DiscountsListBox.DataSource = null;
+                DiscountsListBox.DataSource = _cloneCurrentCustomer.Discounts;
+                DiscountsListBox.DisplayMember = "Info";
+
                 EditButton.Enabled = true;
                 SaveButton.Enabled = false;
             }
@@ -134,10 +142,11 @@ namespace ObjectOrientedPractics.View.Tabs
 
         private void AddCustomerButton_Click(object sender, EventArgs e)
         {
-            ClearCustomerInfo();
             CustomersListBox.SelectedIndex = -1;
             _selectedIndex = -1;
+            ClearCustomerInfo();
             ToggleInputBoxes(true);
+            DiscountsPanel.Enabled = false;
         }
 
         private void EditButton_Click(object sender, EventArgs e)
@@ -203,8 +212,30 @@ namespace ObjectOrientedPractics.View.Tabs
             }
         }
 
+        private void AddDiscountButton_Click(object sender, EventArgs e)
+        {
+            if (CustomersListBox.SelectedIndex != -1)
+            {
+                AddDiscountForm addDiscountForm = new AddDiscountForm();
+                addDiscountForm.SelectedIndex = CustomersListBox.SelectedIndex;
+                addDiscountForm.Customers = Customers;
+                addDiscountForm.Show();
+            }
+        }
+
+        private void RemoveDiscountButton_Click(object sender, EventArgs e)
+        {
+            if (DiscountsListBox.SelectedIndex > 0)
+            {
+                _cloneCurrentCustomer.Discounts.RemoveAt(DiscountsListBox.SelectedIndex);
+            }
+            DiscountsListBox.DataSource = null;
+            DiscountsListBox.DataSource = _cloneCurrentCustomer.Discounts;
+            DiscountsListBox.DisplayMember = "Info";
+        }
+
         /// <summary>
-        /// Метод, который очищает все TextBox.
+        /// Очистка полей данных.
         /// </summary>
         private void ClearCustomerInfo()
         {
@@ -212,38 +243,39 @@ namespace ObjectOrientedPractics.View.Tabs
             FullNameTextBox.Clear();
             FullNameTextBox.BackColor = Color.White;
             IdTextBox.Clear();
+            DiscountsListBox.DataSource = null;
             PriorityCheckBox.Enabled = false;
             SaveButton.Enabled = false;
         }
 
         /// <summary>
-        /// Метод, который отключает или включает все TextBox.
+        /// Вкл. и выкл. полей данных.
         /// </summary>
-        /// <param name="value">True or false.</param>
+        /// <param name="value">true or false</param>
         private void ToggleInputBoxes(bool value)
         {
             FullNameTextBox.Enabled = value;
             AddressControl.Enabled = value;
             SaveButton.Visible = value;
             PriorityCheckBox.Enabled = value;
+            DiscountsPanel.Enabled = value;
         }
 
         /// <summary>
-        /// Метод, который сортирует <see cref= "_customersList" /> и < see cref= "CustomersListBox" />
-        /// и загружает данные из <see cref="_customersList"/> в <see cref = "CustomersListBox" />.
+        /// Сортировка <see cref="CustomersListBox"/>.
         /// </summary>
         private void Sort()
         {
-            _indexBeforeSort = CustomersListBox.SelectedIndex;
+            var _indexBeforeSort = CustomersListBox.SelectedIndex;
             CustomersListBox.SelectedIndexChanged -= CustomersListBox_SelectedIndexChanged;
-            _customersList = _customersList.OrderBy((Customer) => Customer.ToString()).ToList();
+            _customersList = _customersList.OrderBy(customer => customer.ToString()).ToList();
             CustomersListBox.DataSource = _customersList;
             CustomersListBox.SelectedIndex = _indexBeforeSort;
             CustomersListBox.SelectedIndexChanged += CustomersListBox_SelectedIndexChanged;
         }
 
         /// <summary>
-        /// Метод, который обновляет данные текущего выбранного покупателя в TextBox.
+        /// Метод, который обновляет данные текущего выбранного покупателя.
         /// </summary>
         private void UpdateCustomerInfo()
         {
@@ -251,11 +283,14 @@ namespace ObjectOrientedPractics.View.Tabs
             AddressControl.Address = _currentCustomer.Address;
             IdTextBox.Text = _currentCustomer.Id.ToString();
             PriorityCheckBox.Checked = _currentCustomer.IsPriority;
+            DiscountsListBox.DataSource = null;
+            DiscountsListBox.DataSource = _cloneCurrentCustomer.Discounts;
+            DiscountsListBox.DisplayMember = "Info";
+
         }
 
         /// <summary>
-        /// Метод, который проверяет значения текстовых полей 
-        /// и не даёт сохранить их в случае неправильного ввода. 
+        /// Проверка на правильный ввод всех полей.
         /// </summary>
         private void CheckData()
         {

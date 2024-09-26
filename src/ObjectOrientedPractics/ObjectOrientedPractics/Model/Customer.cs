@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using ObjectOrientedPractics.Model.Orders;
 using ObjectOrientedPractics.Services;
+using ObjectOrientedPractics.Model.Discounts;
 
 namespace ObjectOrientedPractics.Model
 {
@@ -8,11 +10,6 @@ namespace ObjectOrientedPractics.Model
     /// </summary>
     internal class Customer: ICloneable
     {
-        /// <summary>
-        /// Счётчик для <see cref="Customer"/>.
-        /// </summary>
-        private static int _idCounter = 0;
-
         /// <summary>
         /// Полное имя покупателя.
         /// </summary>
@@ -37,6 +34,11 @@ namespace ObjectOrientedPractics.Model
         /// Возвращает идентификатор.
         /// </summary>
         public int Id { get; }
+
+        /// <summary>
+        /// Задаёт и возвращает список скидок.
+        /// </summary>
+        public List<IDiscount> Discounts { get; set; }
 
         /// <summary>
         /// Является ли заказчик приоритетным в обслуживании.
@@ -111,8 +113,7 @@ namespace ObjectOrientedPractics.Model
         public Customer()
         {
             Cart = new Cart();
-            _idCounter++;
-            Id = _idCounter;
+            Id = IdGenerator.GetNextId();
         }
 
 
@@ -127,9 +128,10 @@ namespace ObjectOrientedPractics.Model
         {
             Fullname = fullname;  
             Address = address;
-            _idCounter++;
-            Id = _idCounter;
+            Id = IdGenerator.GetNextId();
             Cart = new Cart();
+            Discounts = new List<IDiscount>();
+            Discounts.Add(new PointsDiscount());
         }
 
 

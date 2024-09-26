@@ -13,6 +13,7 @@ using System.Text.Json.Serialization;
 using static System.Environment;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
+using ObjectOrientedPractics.Model.Enums;
 
 namespace ObjectOrientedPractics.View.Tabs
 {
@@ -84,10 +85,8 @@ namespace ObjectOrientedPractics.View.Tabs
         public ItemsTab()
         {
             InitializeComponent();
-            Sort();
             ClearItemInfo();
             ItemsListBox.SelectedIndex = -1;
-            // Заполнение CategoryComboBox значениями перечисления ItemsCategory
             CategoryComboBox.Items.AddRange(_categoryValues);
             CategoryComboBox.SelectedItem = _categoryValues[0];
         }
@@ -141,7 +140,14 @@ namespace ObjectOrientedPractics.View.Tabs
             if (ItemsListBox.SelectedIndex != -1)
             {
                 ToggleInputBoxes(false);
-                _cloneCurrentItem = (Item)_itemsList[ItemsListBox.SelectedIndex].Clone();
+
+                // Получаем выбранный элемент напрямую через SelectedItem
+                _cloneCurrentItem = (Item)ItemsListBox.SelectedItem;
+
+                // Клонируем объект для редактирования
+                _cloneCurrentItem = (Item)_cloneCurrentItem.Clone();
+
+                // Заполняем текстовые поля данными из выбранного товара
                 NameTextBox.Text = _cloneCurrentItem.Name.ToString();
                 DescriptionTextBox.Text = _cloneCurrentItem.Info.ToString();
                 IdTextBox.Text = _cloneCurrentItem.Id.ToString();
@@ -291,20 +297,6 @@ namespace ObjectOrientedPractics.View.Tabs
         }
 
         /// <summary>
-        /// Метод который сортирует <see cref="_itemsList"/> и <see cref="ItemsListBox"/>
-        /// и загружает данные из <see cref="_itemsList"/> в <see cref="ItemsListBox"/>.
-        /// </summary>
-        private void Sort()
-        {
-            _indexBeforeSort = ItemsListBox.SelectedIndex;
-            ItemsListBox.SelectedIndexChanged -= ItemsListBox_SelectedIndexChanged;
-            _itemsList = _itemsList.OrderBy((item) => item.ToString()).ToList();
-            ItemsListBox.DataSource = _itemsList;
-            ItemsListBox.SelectedIndex = _indexBeforeSort;
-            ItemsListBox.SelectedIndexChanged += ItemsListBox_SelectedIndexChanged;
-        }
-
-        /// <summary>
         /// Метод, который очищает все TextBox.
         /// </summary>
         private void ClearItemInfo()
@@ -333,6 +325,20 @@ namespace ObjectOrientedPractics.View.Tabs
             {
                 SaveButton.Enabled = false;
             }
+        }
+
+        /// <summary>
+        /// Метод, который сортирует <see cref="_itemsList"/> и <see cref="ItemsListBox"/>
+        /// в алфавитном порядке.
+        /// </summary>
+        private void Sort()
+        {
+            _indexBeforeSort = ItemsListBox.SelectedIndex;
+            ItemsListBox.SelectedIndexChanged -= ItemsListBox_SelectedIndexChanged;
+            _itemsList = _itemsList.OrderBy(item => item.Name).ToList();
+            ItemsListBox.DataSource = _itemsList;
+            ItemsListBox.SelectedIndex = _indexBeforeSort;
+            ItemsListBox.SelectedIndexChanged += ItemsListBox_SelectedIndexChanged;
         }
     }
 }
