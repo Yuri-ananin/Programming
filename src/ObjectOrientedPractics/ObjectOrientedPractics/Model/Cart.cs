@@ -9,7 +9,7 @@ namespace ObjectOrientedPractics.Model
     /// <summary>
     /// Класс, описывающий корзину с товарами покупателя.
     /// </summary>
-    internal class Cart
+    internal class Cart: ICloneable
     {
         /// <summary>
         /// Список товаров в корзине.
@@ -45,6 +45,16 @@ namespace ObjectOrientedPractics.Model
                 }
                 return Items.Sum(item => item.Cost);
             }
+        }
+
+        /// <summary>
+        /// Клонирование объекта класса.
+        /// <returns>Клонированный объект класса <see cref="Item"/>.</returns>
+        public object Clone()
+        {
+            Cart cloneCart = new Cart();
+            cloneCart.Items = Items;
+            return cloneCart;
         }
     }
 }
