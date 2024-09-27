@@ -4,7 +4,7 @@ using ObjectOrientedPractics.Services;
 
 namespace ObjectOrientedPractics.Model.Discounts
 {
-    class PercentDiscount : IDiscount
+    class PercentDiscount : IDiscount, IComparable<PercentDiscount>
     {
         /// <summary>
         /// Текущая категория товара.
@@ -103,6 +103,24 @@ namespace ObjectOrientedPractics.Model.Discounts
         public string Info
         {
             get => $"«Процентная «{DiscountCategory}» - {Math.Floor(_currentDiscount * 100)}%";
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="IComparable"/>
+        /// </summary>
+        /// <param name="other">Сравниваемая переменная типа <see cref="PercentDiscount"/>.</param>
+        /// <returns>1 - больше или null сравниваемый объект. 0 - они равны. -1 - сравниваемый больше.</returns>
+        public int CompareTo(PercentDiscount other)
+        {
+            if (other == null)
+            {
+                return 1;
+            }
+
+            else
+            {
+                return this.CurrentDiscount.CompareTo(other.CurrentDiscount);
+            }
         }
     }
 }

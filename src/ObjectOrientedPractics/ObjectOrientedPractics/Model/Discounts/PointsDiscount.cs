@@ -1,6 +1,6 @@
 ﻿namespace ObjectOrientedPractics.Model.Discounts
 {
-    class PointsDiscount : IDiscount
+    class PointsDiscount : IDiscount, IComparable<PointsDiscount>
     {
         /// <summary>
         /// Количество баллов.
@@ -78,6 +78,25 @@
             double amount = items.Sum(item => item.Cost);
 
             PointsCounter += Convert.ToInt32(Math.Ceiling(amount * 0.1));
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="IComparable"/>
+        /// </summary>
+        /// <param name="other">Сравниваемая переменная типа <see cref="PointsDiscount"/>.</param>
+        /// <returns>1 - больше или null сравниваемый объект.
+        /// 0 - они равны. -1 - сравниваемый больше.</returns>
+        public int CompareTo(PointsDiscount? other)
+        {
+            if (other == null)
+            {
+                return 1;
+            }
+
+            else
+            {
+                return this.PointsCounter.CompareTo(other.PointsCounter);
+            }
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ namespace ObjectOrientedPractics.Model.Orders
     /// <summary>
     /// Класс, описывающий заказ покупателя.
     /// </summary>
-    internal class Order
+    internal class Order: IEquatable<Order>
     {
         /// <summary>
         /// Id заказа.
@@ -174,6 +174,34 @@ namespace ObjectOrientedPractics.Model.Orders
             OrderStatus = orderStatus;
             AllOrdersCount++;
             Id = _allOrdersCount;
+        }
+        /// <summary>
+        /// <inheritdoc cref="IEquatable<Address>"/>
+        /// </summary>
+        /// <param name="other">Сравниваемая переменная типа <see cref="Order"/>.</param>
+        /// <returns>True - если они равны. False - не равны.</returns>
+        public bool Equals(Order other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+            if (object.ReferenceEquals(this, other))
+            {
+                return true;
+            }
+            if (this.GetType() != other.GetType())
+            {
+                return false;
+            }
+            if (this.Items == other.Items || this.Id == other.Id)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

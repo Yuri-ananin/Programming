@@ -11,7 +11,7 @@ namespace ObjectOrientedPractics.Model
     /// <summary>
     /// Класс, который описывает адрес доставки покупателю.
     /// </summary>
-    public class Address: ICloneable
+    public class Address: ICloneable, IEquatable<Address>
     {
         /// <summary>
         /// Почтовый индекс.
@@ -181,8 +181,27 @@ namespace ObjectOrientedPractics.Model
 
         public object Clone()
         {
-            // Возвращаем новый объект Address с теми же значениями полей
             return new Address(Index, Country, City, Street, Building, Apartment);
+        }
+
+        public bool Equals(Address other)
+        {
+            if (object.ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (this.Index != other.Index || this.Building != other.Building
+                || this.City != other.City || this.Country != other.Country
+                || this.Street != other.Street || this.Apartment != other.Apartment)
+            {
+                return false;
+            }
+
+            else
+            {
+                return true;
+            }
         }
     }
 }
