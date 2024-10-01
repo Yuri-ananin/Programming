@@ -173,22 +173,20 @@ namespace ObjectOrientedPractics.Model
         /// <returns>True - если они равны. False - не равны.</returns>
         public bool Equals(Item other)
         {
-            if (other == null)
-            {
-                return false;
-            }
             if (object.ReferenceEquals(this, other))
             {
                 return true;
             }
-            if (this.Name == other.Name || this.Info == other.Info
-                || this.Cost == other.Cost || this.Category == other.Category)
-            {
-                return true;
-            }
-            else
+
+            if (this.Name != other.Name || this.Info != other.Info
+                || this.Cost != other.Cost || this.Category != other.Category)
             {
                 return false;
+            }
+
+            else
+            {
+                return true;
             }
         }
 

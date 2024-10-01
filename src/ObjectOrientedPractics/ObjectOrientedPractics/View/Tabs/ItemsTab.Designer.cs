@@ -43,6 +43,10 @@
             ItemsListBox = new ListBox();
             AddItemButton = new Button();
             ItemsGroupBox = new GroupBox();
+            OrderByComboBox = new ComboBox();
+            SortByLabel = new Label();
+            FindTextBox = new TextBox();
+            FindLabel = new Label();
             CategoryComboBox = new ComboBox();
             CategoryLabel = new Label();
             SaveButton = new Button();
@@ -150,9 +154,9 @@
             ItemsListBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             ItemsListBox.FormattingEnabled = true;
             ItemsListBox.ItemHeight = 15;
-            ItemsListBox.Location = new Point(6, 19);
+            ItemsListBox.Location = new Point(6, 49);
             ItemsListBox.Name = "ItemsListBox";
-            ItemsListBox.Size = new Size(266, 484);
+            ItemsListBox.Size = new Size(266, 424);
             ItemsListBox.TabIndex = 0;
             ItemsListBox.SelectedIndexChanged += ItemsListBox_SelectedIndexChanged;
             // 
@@ -169,6 +173,10 @@
             // 
             // ItemsGroupBox
             // 
+            ItemsGroupBox.Controls.Add(OrderByComboBox);
+            ItemsGroupBox.Controls.Add(SortByLabel);
+            ItemsGroupBox.Controls.Add(FindTextBox);
+            ItemsGroupBox.Controls.Add(FindLabel);
             ItemsGroupBox.Controls.Add(CategoryComboBox);
             ItemsGroupBox.Controls.Add(CategoryLabel);
             ItemsGroupBox.Controls.Add(SaveButton);
@@ -191,6 +199,42 @@
             ItemsGroupBox.TabIndex = 8;
             ItemsGroupBox.TabStop = false;
             ItemsGroupBox.Text = "Items";
+            // 
+            // OrderByComboBox
+            // 
+            OrderByComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            OrderByComboBox.FormattingEnabled = true;
+            OrderByComboBox.Location = new Point(68, 477);
+            OrderByComboBox.Name = "OrderByComboBox";
+            OrderByComboBox.Size = new Size(204, 23);
+            OrderByComboBox.TabIndex = 17;
+            OrderByComboBox.SelectedIndexChanged += OrderByComboBox_SelectedIndexChanged;
+            // 
+            // SortByLabel
+            // 
+            SortByLabel.AutoSize = true;
+            SortByLabel.Location = new Point(6, 480);
+            SortByLabel.Name = "SortByLabel";
+            SortByLabel.Size = new Size(56, 15);
+            SortByLabel.TabIndex = 16;
+            SortByLabel.Text = "Order by:";
+            // 
+            // FindTextBox
+            // 
+            FindTextBox.Location = new Point(47, 19);
+            FindTextBox.Name = "FindTextBox";
+            FindTextBox.Size = new Size(225, 23);
+            FindTextBox.TabIndex = 15;
+            FindTextBox.TextChanged += FindTextBox_TextChanged;
+            // 
+            // FindLabel
+            // 
+            FindLabel.AutoSize = true;
+            FindLabel.Location = new Point(6, 22);
+            FindLabel.Name = "FindLabel";
+            FindLabel.Size = new Size(33, 15);
+            FindLabel.TabIndex = 14;
+            FindLabel.Text = "Find:";
             // 
             // CategoryComboBox
             // 
@@ -217,7 +261,7 @@
             SaveButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             SaveButton.Location = new Point(191, 535);
             SaveButton.Name = "SaveButton";
-            SaveButton.Size = new Size(75, 23);
+            SaveButton.Size = new Size(81, 23);
             SaveButton.TabIndex = 11;
             SaveButton.Text = "Save";
             SaveButton.UseVisualStyleBackColor = true;
@@ -229,7 +273,7 @@
             EditButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             EditButton.Location = new Point(191, 506);
             EditButton.Name = "EditButton";
-            EditButton.Size = new Size(75, 23);
+            EditButton.Size = new Size(81, 23);
             EditButton.TabIndex = 10;
             EditButton.Text = "Edit";
             EditButton.UseVisualStyleBackColor = true;
@@ -268,5 +312,9 @@
         private Button EditButton;
         private ComboBox CategoryComboBox;
         private Label CategoryLabel;
+        private TextBox FindTextBox;
+        private Label FindLabel;
+        private ComboBox OrderByComboBox;
+        private Label SortByLabel;
     }
 }
