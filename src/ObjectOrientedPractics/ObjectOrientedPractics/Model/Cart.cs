@@ -41,7 +41,7 @@ namespace ObjectOrientedPractics.Model
             {
                 if (items == null || items.Count == 0)
                 {
-                    return 0.0;
+                    return 0;
                 }
                 return Items.Sum(item => item.Cost);
             }

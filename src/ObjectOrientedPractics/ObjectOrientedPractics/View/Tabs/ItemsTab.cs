@@ -11,6 +11,10 @@ namespace ObjectOrientedPractics.View.Tabs
     /// </summary>
     public partial class ItemsTab : UserControl
     {
+        /// <summary>
+        /// Событие, когда список товаров изменён.
+        /// </summary>
+        public event EventHandler ItemsChanged;
 
         /// <summary>
         /// Список с данными о товарах.
@@ -109,6 +113,7 @@ namespace ObjectOrientedPractics.View.Tabs
                     (Category)CategoryComboBox.SelectedItem);
                 _itemsList.Add(_currentItem);
                 SortBy();
+                ItemsChanged?.Invoke(this, EventArgs.Empty);
                 ClearItemInfo();
                 return;
             }
@@ -116,10 +121,12 @@ namespace ObjectOrientedPractics.View.Tabs
             {
                 _itemsList[_itemsList.IndexOf((Item)ItemsListBox.SelectedItem)] = _cloneCurrentItem;
                 _currentItem = _cloneCurrentItem;
+                ItemsChanged?.Invoke(this, EventArgs.Empty);
             }
             _displayedItems = new List<Item>();
             FindTextBox.Text = string.Empty;
             DataTools.FilterNamePrincipleOfVerification = string.Empty;
+            ItemsChanged?.Invoke(this, EventArgs.Empty);
             SortBy();
             ToggleInputBoxes(false);
             UpdateItemInfo();

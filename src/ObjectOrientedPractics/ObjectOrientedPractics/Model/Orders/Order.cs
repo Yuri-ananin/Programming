@@ -122,7 +122,7 @@ namespace ObjectOrientedPractics.Model.Orders
             {
                 if (Items == null || Items.Count == 0)
                 {
-                    return 0.0;
+                    return 0;
                 }
                 return Items.Sum(item => item.Cost);
             }
