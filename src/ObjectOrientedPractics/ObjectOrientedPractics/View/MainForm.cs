@@ -23,6 +23,8 @@ namespace ObjectOrientedPractics
             CartsTab.Items = _store.Items;
             CartsTab.Customers = _store.Customers;
             OrdersTab.Customers = _store.Customers;
+
+            ItemsTab.ItemsChanged += ItemsTab_ItemsChanged;
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -40,6 +42,18 @@ namespace ObjectOrientedPractics
             CartsTab.Items = _store.Items;
             CartsTab.Customers = _store.Customers;
             OrdersTab.Customers = _store.Customers;
+        }
+
+        /// <summary>
+        /// Обработчик события ItemsChanged.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ItemsTab_ItemsChanged(object sender, EventArgs e)
+        {
+            _store.Items = ItemsTab.Items;
+            CartsTab.Items = _store.Items;
+            CartsTab.RefreshData();
         }
 
         private void CreateData()

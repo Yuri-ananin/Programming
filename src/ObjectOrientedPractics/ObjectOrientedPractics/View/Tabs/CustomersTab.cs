@@ -123,7 +123,7 @@ namespace ObjectOrientedPractics.View.Tabs
                 _cloneCurrentCustomer = (Customer)CustomersListBox.SelectedItem;
                 _cloneCurrentCustomer = (Customer)_cloneCurrentCustomer.Clone();
                 FullNameTextBox.Text = _cloneCurrentCustomer.Fullname;
-                AddressControl.Address = (Address)_cloneCurrentCustomer.Address.Clone();
+                AddressControl.Address = _cloneCurrentCustomer.Address;
                 IdTextBox.Text = _cloneCurrentCustomer.Id.ToString();
                 PriorityCheckBox.Checked = _cloneCurrentCustomer.IsPriority;
 
@@ -268,7 +268,7 @@ namespace ObjectOrientedPractics.View.Tabs
         {
             var _indexBeforeSort = CustomersListBox.SelectedIndex;
             CustomersListBox.SelectedIndexChanged -= CustomersListBox_SelectedIndexChanged;
-            _customersList = _customersList.OrderBy(customer => customer.ToString()).ToList();
+            _customersList = _customersList.OrderBy((Customer) => Customer.ToString()).ToList();
             CustomersListBox.DataSource = _customersList;
             CustomersListBox.SelectedIndex = _indexBeforeSort;
             CustomersListBox.SelectedIndexChanged += CustomersListBox_SelectedIndexChanged;

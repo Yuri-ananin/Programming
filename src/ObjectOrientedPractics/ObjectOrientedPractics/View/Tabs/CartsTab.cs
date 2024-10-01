@@ -193,5 +193,16 @@ namespace ObjectOrientedPractics.View.Tabs
             }
             return discountAmount;
         }
+
+        public void RefreshData()
+        {
+            _currentCustomer = (Customer)CustomersComboBox.SelectedItem;
+            DiscountsCheckedListBox.DataSource = _currentCustomer.Discounts;
+            DiscountsCheckedListBox.DisplayMember = "Info";
+            for (int i = 0; i < DiscountsCheckedListBox.Items.Count; i++)
+            {
+                DiscountsCheckedListBox.SetItemChecked(i, true);
+            }
+        }
     }
 }

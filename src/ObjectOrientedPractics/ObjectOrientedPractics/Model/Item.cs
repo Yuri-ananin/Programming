@@ -14,6 +14,12 @@ namespace ObjectOrientedPractics.Model
     /// </summary>
     class Item: ICloneable, IEquatable<Item>, IComparable<Item>
     {
+        public event EventHandler<EventArgs> NameChanged;
+
+        public event EventHandler<EventArgs> CostChanged;
+
+        public event EventHandler<EventArgs> InfoChanged;
+
         /// <summary>
         /// Id товара.
         /// </summary>
@@ -72,6 +78,7 @@ namespace ObjectOrientedPractics.Model
             {
                 ValueValidator.AssertStringOnLength(value, 200, nameof(Name));
                 _name = value;
+                NameChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -88,6 +95,7 @@ namespace ObjectOrientedPractics.Model
             {
                 ValueValidator.AssertStringOnLength(value, 1000, nameof(Info));
                 _info = value;
+                InfoChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -104,6 +112,7 @@ namespace ObjectOrientedPractics.Model
             {
                 ValueValidator.AssertDoubleInRange(value, 100_000.0, 0.0, "Cost");
                 _cost = value;
+                CostChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -196,7 +205,7 @@ namespace ObjectOrientedPractics.Model
         /// <param name="other">Сравниваемая переменная типа <see cref="Item"/>.</param>
         /// <returns>1 - больше или null сравниваемый объект. 0 - они равны.
         /// -1 - сравниваемый больше.</returns>
-        public int CompareTo(Item? other)
+        public int CompareTo(Item other)
         {
             if (other == null)
             {

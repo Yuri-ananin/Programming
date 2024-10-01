@@ -104,7 +104,7 @@
         /// </summary>
         public string Info
         {
-            get => $"«Накопительная – {PointsCounter} баллов";
+            get => $"Накопительная – {PointsCounter} баллов";
         }
     }
 }
