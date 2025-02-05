@@ -1,0 +1,60 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:View.ViewModel"
+        xmlns:ViewModel="clr-namespace:View.ViewModel" x:Name="MainWindow1" x:Class="View.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="500" WindowStyle="ThreeDBorderWindow" MinWidth="500" MinHeight="350">
+    <Window.DataContext>
+        <vm:MainVM/>
+    </Window.DataContext>
+
+    <Grid x:Name="MainWindowGrid" Margin="15,15,15,15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="275*"/>
+            <RowDefinition Height="3"/>
+            <RowDefinition Height="27*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="233*"/>
+            <ColumnDefinition Width="3"/>
+            <ColumnDefinition Width="233*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox x:Name="EditContactGroupBox" Header="Edit Contact">
+            <Grid x:Name="EditContactGrid">
+                <Label x:Name="NameLabel" Content="Name:" VerticalAlignment="Top" Height="25"/>
+                <TextBox x:Name="EditNameTextBox" TextWrapping="Wrap" Margin="0,25,0,0" Height="25" VerticalAlignment="Top" Text="{Binding Name, Mode=TwoWay}"/>
+                <Label x:Name="PhoneNumberLabel" Content="Phone Number:" VerticalAlignment="Top" Height="25" Margin="0,50,0,0"/>
+                <TextBox x:Name="EditPhoneNumberTextBox" TextWrapping="Wrap" Margin="0,75,0,0" Height="25" VerticalAlignment="Top" Text="{Binding Phone, Mode=TwoWay}"/>
+                <Label x:Name="EmailLabel" Content="Email:" Margin="0,100,0,0" Height="25" VerticalAlignment="Top"/>
+                <TextBox x:Name="EditEmailTextBox" TextWrapping="Wrap" Margin="0,125,0,0" Height="25" VerticalAlignment="Top" Text="{Binding Email, Mode=TwoWay}"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="ReadContactGroupBox" Header="Read Contact" Grid.Column="2">
+            <Grid x:Name="ReadContactGrid">
+                <Label x:Name="ReadNameLabel" Content="Name:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="222" Height="25"/>
+                <Label x:Name="ReadNameFELabel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="222" Height="25" Margin="0,25,0,0" FontWeight="Bold" IsEnabled="False"
+                       Content="{Binding ElementName=EditNameTextBox, Path=Text, UpdateSourceTrigger=PropertyChanged}">
+                    <Label.DataContext>
+                        <ViewModel:MainVM/>
+                    </Label.DataContext>
+                </Label>
+                <Label x:Name="ReadPhoneLabel" Content="Phone Number:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="222" Height="25" Margin="0,48,0,0"/>
+                <Label x:Name="ReadPhoneFELabel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="222" Height="25" Margin="0,73,0,0" FontWeight="Bold" IsEnabled="False"
+                       Content="{Binding ElementName=EditPhoneNumberTextBox, Path=Text, UpdateSourceTrigger=PropertyChanged}">
+                </Label>
+                <Label x:Name="ReadEmailLabel" Content="Email:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="222" Height="25" Margin="0,100,0,0"/>
+                <Label x:Name="ReadEmailFELabel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="222" Height="25" Margin="0,125,0,0" FontWeight="Bold" IsEnabled="False"
+                       Content="{Binding ElementName=EditEmailTextBox, Path=Text, UpdateSourceTrigger=PropertyChanged}">
+                    <Label.DataContext>
+                        <ViewModel:MainVM/>
+                    </Label.DataContext>
+                </Label>
+            </Grid>
+        </GroupBox>
+        <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="76" Height="25" Command="{Binding LoadCommand}" Grid.Column="2" Grid.Row="2"/>
+        <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Height="25" Command="{Binding SaveCommand}" Grid.Column="2" Grid.Row="2" Margin="0,0,78,0"/>
+    </Grid>
+</Window>
