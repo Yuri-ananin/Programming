@@ -11,7 +11,7 @@ namespace ContactsMVVM.ViewModel
     internal class MainVM : INotifyPropertyChanged
     {
         /// <summary>
-        /// Событие для отслеживаня изменений в свойствах.
+        /// Событие, для отслеживаня изменений в свойствах.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -21,7 +21,7 @@ namespace ContactsMVVM.ViewModel
         private ContactVM _selectedContact;
 
         /// <summary>
-        /// Контакт, хранящий данные дло изменения. 
+        /// Контакт хранящий неизменённые данные. 
         /// </summary>
         private ContactVM _beforeEditingContact;
 
@@ -73,7 +73,14 @@ namespace ContactsMVVM.ViewModel
         /// <summary>
         /// Возвращает и задаёт данные.
         /// </summary>
-        public ContactVM BeforeEditingContact { get; set; }
+        public ContactVM BeforeEditingContact
+        {
+            get => _beforeEditingContact;
+            set
+            {
+                _beforeEditingContact = value;
+            }
+        }
 
         /// <summary>
         /// Возвращает и задаёт список контактов.
@@ -276,7 +283,8 @@ namespace ContactsMVVM.ViewModel
             {
                 return !string.IsNullOrEmpty(SelectedContact.Name)
                         && !string.IsNullOrEmpty(SelectedContact.PhoneNumber)
-                        && !string.IsNullOrEmpty(SelectedContact.Email);
+                        && !string.IsNullOrEmpty(SelectedContact.Email)
+                        && SelectedContact.HasValidationErrors();
             }
             return false;
         }
@@ -286,21 +294,31 @@ namespace ContactsMVVM.ViewModel
         /// </summary>
         /// <param name="parameter">Параметр.</param>
         /// <returns>True - доступно добавление контакта. False - недоступно.</returns>
-        private bool CanAddContact(object parameter) => !IsAdding;
+        private bool CanAddContact(object parameter)
+        {
+            return !IsAdding;
+        }
 
         /// <summary>
         /// Проверка возможности редактирования контакта <see cref="ContactVM"/>.
         /// </summary>
         /// <param name="parameter"Параметр.</param>
         /// <returns>True - доступно добавление контакта. False - недоступно.</returns>
-        private bool CanEditContact(object parameter) => SelectedContact != null && !IsAdding && !IsEditing;
+        private bool CanEditContact(object parameter)
+        {
+            return SelectedContact != null && !IsAdding && !IsEditing;
+        }
 
         /// <summary>
         /// Проверка возможности удаления контакта <see cref="ContactVM"/>.
         /// </summary>
         /// <param name="parameter">Параметр.</param>
         /// <returns>True - доступно удаление контакта. False - недоступно.</returns>
-        private bool CanRemoveContact(object parameter) => SelectedContact != null && Contacts.Contains(SelectedContact);
+        private bool CanRemoveContact(object parameter)
+        {
+            return SelectedContact != null && Contacts.Contains(SelectedContact);
+
+        }
 
         /// <summary>
         /// Отслеживание вохможности нажатия кнопки Apply.
@@ -313,10 +331,12 @@ namespace ContactsMVVM.ViewModel
         }
 
         /// <summary>
-        /// Обновляет состояние команд.
+        /// Вызывает событие <see cref="PropertyChanged"/>.
         /// </summary>
-        private void UpdateCommands()
+        /// <param name="property">Название изменённого свойства.</param>
+        private void OnPropertyChanged([CallerMemberName] string property = "")
         {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
             ApplyCommand.RaiseCanExecuteChanged();
             AddCommand.RaiseCanExecuteChanged();
             RemoveCommand.RaiseCanExecuteChanged();
@@ -324,17 +344,7 @@ namespace ContactsMVVM.ViewModel
         }
 
         /// <summary>
-        /// Вызывает событие <see cref="PropertyChanged"/>.
-        /// </summary>
-        /// <param name="property">Название изменённого свойства.</param>
-        private void OnPropertyChanged([CallerMemberName] string property = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
-            UpdateCommands();
-        }
-
-        /// <summary>
-        /// Создает экземпляр класса <see cref="MainVM"/> и задаёт команды для работы с ним <see cref="RelayCommand"/>.
+        /// Создаёт экземпляр класса <see cref="MainVM"/> и задаёт команды для работы с ним <see cref="RelayCommand"/>.
         /// </summary>
         public MainVM()
         {
@@ -344,7 +354,7 @@ namespace ContactsMVVM.ViewModel
             EditCommand = new RelayCommand(EditContact, CanEditContact);
             LoadContacts();
 
-            if (Contacts != null && Contacts.Count > 0)
+            if (Contacts.Count > 0)
             {
                 SelectedContact = Contacts[0];
             }
