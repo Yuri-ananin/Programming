@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace ContactsMVVM.Model.Services
+namespace Contacts.View.Services
 {
     /// <summary>
     /// Конвертация <see cref="Visibility"/> значений.
@@ -13,8 +13,8 @@ namespace ContactsMVVM.Model.Services
         /// <summary>
         /// Конвертер Visibility значений.
         /// </summary>
-        /// <param name="value">Значение типа <see cref="bool"/>.</param>
-        /// <param name="targetType">Ожидаемый тип.</param>
+        /// <param name="value">Значение <see cref="bool"/>.</param>
+        /// <param name="targetType">Тип.</param>
         /// <param name="parameter">Парамтер.</param>
         /// <param name="culture"><see cref="CultureInfo>"./></param>
         /// <returns>Visibility - True, Collapsed - False</returns>
@@ -30,7 +30,7 @@ namespace ContactsMVVM.Model.Services
         /// <summary>
         /// Обратная конвертация Visibility.
         /// </summary>
-        /// <param name="value">Значение типа <see cref="bool"/>.</param>
+        /// <param name="value">Значение <see cref="bool"/>.</param>
         /// <param name="targetType">Тип.</param>
         /// <param name="parameter">Парамтер.</param>
         /// <param name="culture"><see cref="CultureInfo>"./></param>

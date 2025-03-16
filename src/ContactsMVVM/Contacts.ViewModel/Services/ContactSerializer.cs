@@ -1,45 +1,47 @@
-﻿using ContactsMVVM.ViewModel;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
 
-namespace ContactsMVVM.Model.Services
+namespace Contacts.ViewModel.Services
 {
     /// <summary>
-    /// Класс, предоставляющий методы для сериализации и десериализации списка контактов.
+    /// Сериализация и десериализация контактов <see cref="Contact"></see>
+    /// </summary>
+    /// <summary>
+    /// Класс, описывающий методы для сериализации и десериализации.
     /// </summary>
     internal static class ContactSerializer
     {
         /// <summary>
-        /// Путь к папке, где хранятся данные.
+        /// Путь к файлу.
         /// </summary>
         private readonly static string _folderPath = Path.Combine(Environment.GetFolderPath(
-            Environment.SpecialFolder.MyDocuments), "ContactsMVVM");
+            Environment.SpecialFolder.MyDocuments), "ContactsData");
 
         /// <summary>
-        /// Полный путь к файлу JSON, содержащему список контактов.
+        /// Путь к папке.
         /// </summary>
         private static readonly string _filePath = Path.Combine(Environment.GetFolderPath(
-            Environment.SpecialFolder.MyDocuments), "ContactsMVVM", "contacts.json");
+            Environment.SpecialFolder.MyDocuments), "ContactsData", "contacts_data.json");
 
 
         /// <summary>
-        /// Сохраняет коллекцию контактов в JSON-файл.
+        /// Сохранение <see cref="ObservableCollection{ContactVM}"/>.
         /// </summary>
-        /// <param name="contacts">Коллекция контактов <see cref="ObservableCollection{ContactVM}"/></param>
+        /// <param name="contacts">Список контактов <see cref="ObservableCollection{ContactVM}"/></param>
         public static void SaveContacts(ObservableCollection<ContactVM> contacts)
         {
             if (!Directory.Exists(_folderPath))
             {
-                Directory.CreateDirectory(_folderPath);
+                Directory.CreateDirectory(Path.GetDirectoryName(_filePath));
             }
             string json = JsonConvert.SerializeObject(contacts);
             File.WriteAllText(_filePath, json);
         }
 
         /// <summary>
-        /// Загружает список контактов из JSON-файла.
+        /// Загрузка контактов <see cref="ObservableCollection{ContactVM}"/>.
         /// </summary>
         /// <returns>Если найден файл, то вернёт список контактов <see cref="ObservableCollection{ContactVM}"/>, 
         /// иначе вернёт пустой список контактов <see cref="ObservableCollection{ContactVM}"/></returns>
