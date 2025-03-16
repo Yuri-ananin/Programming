@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace ContactsMVVM.Model.Services
+namespace Contacts.ViewModel.Services
 {
     /// <summary>
     /// Конвертация номера телефона.

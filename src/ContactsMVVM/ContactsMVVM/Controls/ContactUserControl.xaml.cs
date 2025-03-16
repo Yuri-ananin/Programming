@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace ContactsMVVM.Controls
+namespace Contacts.View.Controls
 {
     /// <summary>
     /// Логика взаимодействия для ContactUserControl.xaml

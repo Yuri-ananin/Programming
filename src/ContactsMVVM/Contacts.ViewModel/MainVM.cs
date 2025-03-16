@@ -1,14 +1,15 @@
-﻿using ContactsMVVM.Model.Services;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Contacts.ViewModel.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
-namespace ContactsMVVM.ViewModel
+namespace Contacts.ViewModel
 {
     /// <summary>
-    /// Работа с контактами.
+    /// ViewModel для работы с контактами <see cref="ObservableCollection{ContactVM}"/>.
     /// </summary>
-    internal class MainVM : INotifyPropertyChanged
+    public partial class MainVM : ObservableObject
     {
         /// <summary>
         /// Событие, для отслеживаня изменений в свойствах.
@@ -18,169 +19,101 @@ namespace ContactsMVVM.ViewModel
         /// <summary>
         /// Текущий контакт.
         /// </summary>
+        [ObservableProperty]
         private ContactVM _selectedContact;
 
         /// <summary>
         /// Контакт хранящий неизменённые данные. 
         /// </summary>
+        [ObservableProperty]
         private ContactVM _beforeEditingContact;
 
         /// <summary>
         /// Включение режима чтения.
         /// </summary>
+        [ObservableProperty]
         private bool _isReadOnly = true;
 
         /// <summary>
         /// Видимость кнопки Apply.
         /// </summary>
+        [ObservableProperty]
         private bool _isApplyButtonVisibility = false;
 
         /// <summary>
         /// Статус добавления данных.
         /// </summary>
+        [ObservableProperty]
         private bool _isAdding = false;
 
         /// <summary>
         /// Статус редактирования данных.
         /// </summary>
+        [ObservableProperty]
         private bool _isEditing = false;
 
         /// <summary>
-        /// Возвращает и задаёт контакт.
+        /// Действия при изменении контакта.
         /// </summary>
-        public ContactVM SelectedContact
+        /// <param name="oldValue">Предыдущее значение.</param>
+        /// <param name="newValue">Новое значение.</param>
+        partial void OnSelectedContactChanged(ContactVM oldValue, ContactVM newValue)
         {
-            get { return _selectedContact; }
-            set
+            if (newValue != null)
             {
-                if (_selectedContact != value)
-                {
-                    _selectedContact = value;
-
-                    if (Contacts.Contains(value))
-                    {
-                        IsAdding = false;
-                        if (IsEditing)
-                        {
-                            IsEditing = false;
-                        }
-                    }
-                }
-                OnPropertyChanged(nameof(SelectedContact));
+                newValue.PropertyChanged += SelectedContact_PropertyChanged;
             }
+            if (oldValue != null)
+            {
+                oldValue.PropertyChanged -= SelectedContact_PropertyChanged;
+            }
+
+            if (Contacts.Contains(oldValue))
+            {
+                IsAdding = false;
+                if (IsEditing)
+                {
+                    IsEditing = false;
+                }
+            }
+            CanExecuteCommands();
         }
 
         /// <summary>
-        /// Возвращает и задаёт данные.
+        /// Действия при изменении свойства ReadOnly у полей.
         /// </summary>
-        public ContactVM BeforeEditingContact
+        /// <param name="oldValue">Предыдущее значение.</param>
+        /// <param name="newValue">Новое значение.</param>
+        partial void OnIsReadOnlyChanged(bool oldValue, bool newValue)
         {
-            get => _beforeEditingContact;
-            set
-            {
-                _beforeEditingContact = value;
-            }
+            IsApplyButtonVisibility = !newValue;
+            IsReadOnly = newValue;
+        }
+
+        /// <summary>
+        /// Действия при изменении свойства добавления полей.
+        /// </summary>
+        /// <param name="oldValue">Предыдущее значение.</param>
+        /// <param name="newValue">Новое значение.</param>
+        partial void OnIsAddingChanged(bool oldValue, bool newValue)
+        {
+            IsReadOnly = !newValue;
+        }
+
+        /// <summary>
+        /// Действия при изменении свойства редактирования полей.
+        /// </summary>
+        /// <param name="oldValue">Предыдущее значение.</param>
+        /// <param name="newValue">Новое значение.</param>
+        partial void OnIsEditingChanged(bool oldValue, bool newValue)
+        {
+            IsReadOnly = !newValue;
         }
 
         /// <summary>
         /// Возвращает и задаёт список контактов.
         /// </summary>
         public ObservableCollection<ContactVM> Contacts { get; set; }
-
-        /// <summary>
-        /// Возвращает и задаёт команду для добавления контакта <see cref="ContactVM"/>.
-        /// </summary>
-        public RelayCommand AddCommand { get; private set; }
-
-        /// <summary>
-        /// Возвращает и задаёт команду для удаления контакта <see cref="ContactVM"/>.
-        /// </summary>
-        public RelayCommand RemoveCommand { get; private set; }
-
-        /// <summary>
-        /// Возвращает и задаёт команду для редактирования контакта <see cref="ContactVM"/>.
-        /// </summary>
-        public RelayCommand EditCommand { get; private set; }
-
-        /// <summary>
-        /// Возвращает и задаёт команду для удаления контакта <see cref="ContactVM"/>.
-        /// </summary>
-        public RelayCommand ApplyCommand { get; private set; }
-
-        /// <summary>
-        /// Возвращает и задает свойство значения только для чтения.
-        /// </summary>
-        public bool IsReadOnly
-        {
-            get => _isReadOnly;
-            set
-            {
-                if (_isReadOnly != value)
-                {
-                    if (value)
-                    {
-                        SelectedContact.PropertyChanged -= SelectedContact_PropertyChanged;
-                    }
-                    else
-                    {
-                        SelectedContact.PropertyChanged += SelectedContact_PropertyChanged;
-                    }
-                    ApplyButtonVisibility = !value;
-                    _isReadOnly = value;
-                    OnPropertyChanged(nameof(IsReadOnly));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Возвращает и задаёт видимость кнопки Apply.
-        /// </summary>
-        public bool ApplyButtonVisibility
-        {
-            get => _isApplyButtonVisibility;
-            set
-            {
-                if (_isApplyButtonVisibility != value)
-                {
-                    _isApplyButtonVisibility = value;
-                    OnPropertyChanged(nameof(ApplyButtonVisibility));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Возвращает и задаёт статус добавления контакта <see cref="ContactVM"/>.
-        /// </summary>
-        public bool IsAdding
-        {
-            get => _isAdding;
-            set
-            {
-                if (_isAdding != value)
-                {
-                    IsReadOnly = !value;
-                    _isAdding = value;
-                    OnPropertyChanged(nameof(IsAdding));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Возвращает и задаёт статус редактирования контакта <see cref="ContactVM"/>.
-        /// </summary>
-        public bool IsEditing
-        {
-            get => _isEditing;
-            set
-            {
-                if (_isEditing != value)
-                {
-                    IsReadOnly = !value;
-                    _isEditing = value;
-                    OnPropertyChanged(nameof(IsEditing));
-                }
-            }
-        }
 
         /// <summary>
         /// Метод для сохранения контактов.
@@ -191,12 +124,20 @@ namespace ContactsMVVM.ViewModel
         }
 
         /// <summary>
+        /// Загрузка контактов <see cref="ObservableCollection{ContactVM}"/>.
+        /// </summary>
+        private void LoadContacts()
+        {
+            Contacts = ContactSerializer.LoadContacts();
+        }
+
+        /// <summary>
         /// Применение изменений у контакта <see cref="ContactVM"/>.
         /// </summary>
         /// <param name="parameter">Параметр.</param>
+        [RelayCommand(CanExecute = nameof(CanApplyChanges))]
         private void ApplyChanges(object parameter)
         {
-            SelectedContact.PropertyChanged -= SelectedContact_PropertyChanged;
             if (IsAdding)
             {
                 Contacts.Add(SelectedContact);
@@ -207,41 +148,44 @@ namespace ContactsMVVM.ViewModel
             {
                 int index = Contacts.IndexOf(BeforeEditingContact);
                 Contacts[index] = SelectedContact;
-                OnPropertyChanged(nameof(BeforeEditingContact));
                 SelectedContact = Contacts[index];
                 IsEditing = false;
             }
             SaveContacts();
+            CanExecuteCommands();
         }
 
         /// <summary>
         /// Добавление контакта <see cref="ContactVM"/>.
         /// </summary>
         /// <param name="parameter">Параметр.</param>
+        [RelayCommand(CanExecute = nameof(CanAddContact))]
         private void AddContact(object parameter)
         {
             SelectedContact = null;
             SelectedContact = new ContactVM();
             IsAdding = true;
-            OnPropertyChanged(nameof(IsAdding));
+            CanExecuteCommands();
         }
 
         /// <summary>
         /// Редактирование контакта <see cref="ContactVM"/>.
         /// </summary>
         /// <param name="parameter">Параметр.</param>
+        [RelayCommand(CanExecute = nameof(CanEditContact))]
         private void EditContact(object parameter)
         {
             BeforeEditingContact = SelectedContact;
-            SelectedContact = (ContactVM)SelectedContact.Clone();
+            SelectedContact = new ContactVM(SelectedContact.Name, SelectedContact.PhoneNumber, SelectedContact.Email);
             IsEditing = true;
-            OnPropertyChanged(nameof(EditContact));
+            CanExecuteCommands();
         }
 
         /// <summary>
         /// Удаление контакта <see cref="ContactVM"/>.
         /// </summary>
         /// <param name="parameter">Параметр.</param>
+        [RelayCommand(CanExecute = nameof(CanRemoveContact))]
         private void RemoveContact(object parameter)
         {
             int index = Contacts.IndexOf(SelectedContact);
@@ -265,14 +209,6 @@ namespace ContactsMVVM.ViewModel
         }
 
         /// <summary>
-        /// Загрузка контактов <see cref="ObservableCollection{ContactVM}"/>.
-        /// </summary>
-        private void LoadContacts()
-        {
-            Contacts = ContactSerializer.LoadContacts();
-        }
-
-        /// <summary>
         /// Проверка возможности применения изменений контакта <see cref="ContactVM"/>.
         /// </summary>
         /// <param name="parameter">Параметр.</param>
@@ -284,9 +220,9 @@ namespace ContactsMVVM.ViewModel
                 return !string.IsNullOrEmpty(SelectedContact.Name)
                         && !string.IsNullOrEmpty(SelectedContact.PhoneNumber)
                         && !string.IsNullOrEmpty(SelectedContact.Email)
-                        && SelectedContact.HasValidationErrors();
+                        && !SelectedContact.HasErrors;
             }
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -296,7 +232,7 @@ namespace ContactsMVVM.ViewModel
         /// <returns>True - доступно добавление контакта. False - недоступно.</returns>
         private bool CanAddContact(object parameter)
         {
-            return !IsAdding;
+            return !IsAdding && !IsEditing;
         }
 
         /// <summary>
@@ -317,7 +253,6 @@ namespace ContactsMVVM.ViewModel
         private bool CanRemoveContact(object parameter)
         {
             return SelectedContact != null && Contacts.Contains(SelectedContact);
-
         }
 
         /// <summary>
@@ -327,20 +262,19 @@ namespace ContactsMVVM.ViewModel
         /// <param name="e"></param>
         private void SelectedContact_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            ApplyCommand.RaiseCanExecuteChanged();
+            CanExecuteCommands();
         }
 
         /// <summary>
         /// Вызывает событие <see cref="PropertyChanged"/>.
         /// </summary>
         /// <param name="property">Название изменённого свойства.</param>
-        private void OnPropertyChanged([CallerMemberName] string property = "")
+        private void CanExecuteCommands()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
-            ApplyCommand.RaiseCanExecuteChanged();
-            AddCommand.RaiseCanExecuteChanged();
-            RemoveCommand.RaiseCanExecuteChanged();
-            EditCommand.RaiseCanExecuteChanged();
+            ApplyChangesCommand.NotifyCanExecuteChanged();
+            AddContactCommand.NotifyCanExecuteChanged();
+            RemoveContactCommand.NotifyCanExecuteChanged();
+            EditContactCommand.NotifyCanExecuteChanged();
         }
 
         /// <summary>
@@ -348,16 +282,13 @@ namespace ContactsMVVM.ViewModel
         /// </summary>
         public MainVM()
         {
-            ApplyCommand = new RelayCommand(ApplyChanges, CanApplyChanges);
-            AddCommand = new RelayCommand(AddContact, CanAddContact);
-            RemoveCommand = new RelayCommand(RemoveContact, CanRemoveContact);
-            EditCommand = new RelayCommand(EditContact, CanEditContact);
             LoadContacts();
 
             if (Contacts.Count > 0)
             {
                 SelectedContact = Contacts[0];
             }
+            CanExecuteCommands();
         }
     }
 }

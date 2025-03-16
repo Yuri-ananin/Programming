@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
-namespace ContactsMVVM.Model.Services
+namespace Contacts.ViewModel.Services
 {
     /// <summary>
     /// Методы для проверки значений.
     /// </summary>
-    internal class ValueValidator
+    internal static class ValueValidator
     {
         /// <summary>
         /// Метод проверки на правильность ввода номера.
         /// </summary>
         /// <param name="number">Номер телефона.</param>
         /// <returns>True - верно введён. False - неправильно введён.</returns>
-        public static bool ValidateNumber(string number)
+        public static bool ValidatePhoneNumber(string number)
         {
             if (!string.IsNullOrWhiteSpace(number))
             {
@@ -31,7 +26,7 @@ namespace ContactsMVVM.Model.Services
         /// </summary>
         /// <param name="name">Имя для проверки.</param>
         /// <returns>True - верно введено. False - неправильно введено.</returns>
-        public static bool ValidateContactName(string name)
+        public static bool ValidateName(string name)
         {
             if (!string.IsNullOrWhiteSpace(name))
             {
